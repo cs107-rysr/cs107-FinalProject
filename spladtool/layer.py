@@ -17,16 +17,15 @@ class Square(Layer):
         super().__init__()
 
     def forward(self, x):
-        new_tensor = Tensor()
-        new_tensor.data = x.data.copy()
-        new_tensor.data = new_tensor.data ** 2
-        new_tensor.dependency = x
-        new_data.Layer = self
+        y = Tensor(x.data.copy() ** 2)
+        y.dependency = x
+        y.layer = self
+        return y
 
     def __call__(self, x):
         return self.forward(x)
 
-    def backward(self, y):
+    def backward(self, x):
         x.grad = Tensor()
         x.grad.data = x.data.copy()
         x.grad.data = x.grad.data * 2

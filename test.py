@@ -9,6 +9,9 @@ class TestSquare(unittest.TestCase):
         y.backward()
         self.assertEqual(y.data, 16.0)
         self.assertEqual(x.grad.data, 8.0)
+        print('x : ', x)
+        print('y : ', y)
+        print('x.grad : ', x)
 
 
 if __name__ == '__main__':
