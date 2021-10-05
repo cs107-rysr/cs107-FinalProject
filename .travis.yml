@@ -18,4 +18,4 @@ script:
   - coverage run test.py
 
 after_success:
-  - codecov
+  - codecov -t "15d2f85f-eb8c-4863-acdd-b5dd3b2b79ac"
