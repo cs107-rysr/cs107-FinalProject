@@ -16,6 +16,7 @@ install: true
 
 script:
   - coverage run test.py
+  - coverage report
 
 after_success:
   - codecov -t "15d2f85f-eb8c-4863-acdd-b5dd3b2b79ac"
