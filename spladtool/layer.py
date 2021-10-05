@@ -27,7 +27,10 @@ class Square(Layer):
         return self.forward(x)
 
     def backward(self, y):
-        x.grad = 2 * x
+        x.grad = Tensor()
+        x.grad.data = x.data.copy()
+        x.grad.data = x.grad.data * 2
+        return x.grad
 
     def __str__(self):
         return 'spladtool.Layer.Square'
