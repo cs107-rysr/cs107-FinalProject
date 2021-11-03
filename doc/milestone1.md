@@ -90,7 +90,16 @@ We adopt `unittest` as our testing framework. The up-to-now dev-only test script
 ## Usage
 
 1. Install dependencies:
-   - NumPy
+
+   - For now, just install NumPy with pip or use a anaconda distribution
+
+     ```bash
+     pip install numpy
+     ```
+
+   - In the future, we will use virtual environment and provide a requirement list when we distribute our software.
+
+     
 
 2. Try out an example from `test.py` on arithmetic functions:
 
@@ -141,7 +150,34 @@ Our team plans to include the numpy module as the dependency of the auto-differe
 
 The test suite will live in TravisCI and provide coverage reports to Codecov, where the reports are stored.
 
+## Distribution
+
 Our package will be distributed on the Python Package Index (PyPI).
+
+In details, we need to do the following things:
+
+1. Add a licence to our software. See the **Licensing** section
+
+2. Create an conda virtual environment.
+
+3. Install all the dependencies.
+
+4. Register an account using an organization email
+
+5. Following PEP517, install `setuptools` ,`twine` and `build` by
+
+   ```shell
+   python3 -m pip install --upgrade setuptools build twine
+   ```
+
+6. Add a `setup.cfg` or `setup.py` configuration file.
+
+7. Execute build and upload by
+
+   ```shell
+   python3 -m build
+   python3 -m twine upload --repository testpypi dist/*
+   ```
 
 ## Licensing
 
