@@ -49,10 +49,9 @@ The corresponding trace table is:
 |$x_5$| $x_4 + 1$ | $\sin(1) + 2$ | $\cos(x)\dot{x} + \dot{x}$ | $\cos(1) + 2$|
 |$f$| $x_4 + 1$ | $\sin(1) + 2$ | $\cos(x)\dot{x} + \dot{x}$ | $\cos(1) + 2$|
 
-#### Backward Mode (Optional)
+#### Reverse Mode (Optional)
 
-In the backward mode, the final node's gradient is set to 1. Along the forward process, only function evaluations will be done. Only during the backward process the gradients with respect to the nodes will be computed.
-
+In the reversed mode, the final node's gradient is set to 1. Along the forward process, only function evaluations will be done. Only during the backward process the gradients with respect to the nodes will be computed.
 
 
 ## Implementation
@@ -63,13 +62,13 @@ In the backward mode, the final node's gradient is set to 1. Along the forward p
 
 The core data structure here is the `spladtool.Tensor`, which contains the value vector (that will be represented by a `numpy.ndarray`) and corresponding gradient. 
 
-In the backward mode, we need two more attributes or member variables to keep record of the graph dependency: `Tensor.dependency` tracks the dependent tensor and `Tensor.layer` will store the layer or the operation used to attain this tensor. We will explain further how they are used. In the backward mode, we also add a member function called `Tensor.backward()`, which will automatically call the `backward` method of `Tensor.layer` with arguments being `Tensor.dependency` to achieve backward propagation.
+In the reverse mode, we need two more attributes or member variables to keep record of the graph dependency: `Tensor.dependency` tracks the dependent tensor and `Tensor.layer` will store the layer or the operation used to attain this tensor. We will explain further how they are used. In the reverse mode, we also add a member function called `Tensor.reverse()`, which will automatically call the `reverse` method of `Tensor.layer` with arguments being `Tensor.dependency` to achieve reverse propagation.
 
 #### Layer
 
 A layer is defined as a basic operations, i.e. sum, product, division, sine function, etc.
 
-All layer classes inherit from a base class called `Layer`. For the forward mode, the member function `Layer.forward()` computes the evaluation and gradients altogether. In the backward mode, `Layer.forward()` will only handle the evaluation, while `Layer.backward()` will handle the gradients computation.
+All layer classes inherit from a base class called `Layer`. For the forward mode, the member function `Layer.forward()` computes the evaluation and gradients altogether. In the reverse mode, `Layer.forward()` will only handle the evaluation, while `Layer.reverse()` will handle the gradients computation.
 
 ### Functional APIs
 
@@ -141,7 +140,12 @@ Our team plans to include the numpy module as the dependency of the auto-differe
 
 The test suite will live in TravisCI and provide coverage reports to Codecov, where the reports are stored.
 
-Our package will be distributed on the Python Package Index (PyPI).
+Our package will be distributed on the Python Package Index (PyPI). This will be done using the following steps:
+
+   1. Add a pyproject.toml file to the project and insert necessary specifications
+   2. Install build : python -m pip install build 
+   3. Build using : python -m build .
+   4. Upload to PyPI using : twine upload dist/* 
 
 ## Licensing
 
@@ -152,7 +156,18 @@ This project will be licensed using the traditional MIT license due to several f
 - Since this project won’t contain an abundance of novel code (and, therefore, could be duplicated quite easily), we don’t mind letting others use it as they please. 
 - Due to the small scale of the project, we are hoping to use a license which is similarly simple. The MIT license is the best match for our interests outlined above. 
 
+## Feedback
 
+### Milestone 1
+
+   1) Couldn't read the mathematical equations as they didn't render
+	- Changed file to .ipynb for easier rendering
+   2) Referred to reverse mode incorrectly as backward mode
+	- Modified text to correct usage
+   3) Didn't include how users should install/download package
+	- Included more information about dependencies and included commands for users
+   4) Didn't discuss packaging of software
+	- Included basic process we will follow regarding building and uploading package
 
 
 
