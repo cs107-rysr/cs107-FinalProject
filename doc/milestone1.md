@@ -51,8 +51,7 @@ The corresponding trace table is:
 
 #### Reverse Mode (Optional)
 
-In the reverse mode, the final node's gradient is set to 1. Along the forward process, only function evaluations will be done. Only during the backward process the gradients with respect to the nodes will be computed.
-
+In the reversed mode, the final node's gradient is set to 1. Along the forward process, only function evaluations will be done. Only during the backward process the gradients with respect to the nodes will be computed.
 
 
 ## Implementation
@@ -63,13 +62,13 @@ In the reverse mode, the final node's gradient is set to 1. Along the forward pr
 
 The core data structure here is the `spladtool.Tensor`, which contains the value vector (that will be represented by a `numpy.ndarray`) and corresponding gradient. 
 
-In the backward mode, we need two more attributes or member variables to keep record of the graph dependency: `Tensor.dependency` tracks the dependent tensor and `Tensor.layer` will store the layer or the operation used to attain this tensor. We will explain further how they are used. In the backward mode, we also add a member function called `Tensor.backward()`, which will automatically call the `backward` method of `Tensor.layer` with arguments being `Tensor.dependency` to achieve backward propagation.
+In the reverse mode, we need two more attributes or member variables to keep record of the graph dependency: `Tensor.dependency` tracks the dependent tensor and `Tensor.layer` will store the layer or the operation used to attain this tensor. We will explain further how they are used. In the reverse mode, we also add a member function called `Tensor.reverse()`, which will automatically call the `reverse` method of `Tensor.layer` with arguments being `Tensor.dependency` to achieve reverse propagation.
 
 #### Layer
 
 A layer is defined as a basic operations, i.e. sum, product, division, sine function, etc.
 
-All layer classes inherit from a base class called `Layer`. For the forward mode, the member function `Layer.forward()` computes the evaluation and gradients altogether. In the backward mode, `Layer.forward()` will only handle the evaluation, while `Layer.backward()` will handle the gradients computation.
+All layer classes inherit from a base class called `Layer`. For the forward mode, the member function `Layer.forward()` computes the evaluation and gradients altogether. In the reverse mode, `Layer.forward()` will only handle the evaluation, while `Layer.reverse()` will handle the gradients computation.
 
 ### Functional APIs
 
@@ -150,10 +149,6 @@ Our team plans to include the numpy module as the dependency of the auto-differe
 
 The test suite will live in TravisCI and provide coverage reports to Codecov, where the reports are stored.
 
-## Distribution
-
-Our package will be distributed on the Python Package Index (PyPI).
-
 In details, we need to do the following things:
 
 1. Add a licence to our software. See the **Licensing** section
@@ -200,8 +195,6 @@ This project will be licensed using the traditional MIT license due to several f
 	- Included more information about dependencies and included commands for users
    4) Didn't discuss packaging of software
 	- Included basic process we will follow regarding building and uploading package
-
-
 
 
 
