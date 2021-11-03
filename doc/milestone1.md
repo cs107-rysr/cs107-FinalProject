@@ -49,9 +49,9 @@ The corresponding trace table is:
 |$x_5$| $x_4 + 1$ | $\sin(1) + 2$ | $\cos(x)\dot{x} + \dot{x}$ | $\cos(1) + 2$|
 |$f$| $x_4 + 1$ | $\sin(1) + 2$ | $\cos(x)\dot{x} + \dot{x}$ | $\cos(1) + 2$|
 
-#### Backward Mode (Optional)
+#### Reverse Mode (Optional)
 
-In the backward mode, the final node's gradient is set to 1. Along the forward process, only function evaluations will be done. Only during the backward process the gradients with respect to the nodes will be computed.
+In the reverse mode, the final node's gradient is set to 1. Along the forward process, only function evaluations will be done. Only during the backward process the gradients with respect to the nodes will be computed.
 
 
 
@@ -187,6 +187,19 @@ This project will be licensed using the traditional MIT license due to several f
 - As of now, we do not foresee having to deal with any patents or any other dependencies. 
 - Since this project won’t contain an abundance of novel code (and, therefore, could be duplicated quite easily), we don’t mind letting others use it as they please. 
 - Due to the small scale of the project, we are hoping to use a license which is similarly simple. The MIT license is the best match for our interests outlined above. 
+
+## Feedback
+
+### Milestone 1
+
+   1) Couldn't read the mathematical equations as they didn't render
+	- Changed file to .ipynb for easier rendering
+   2) Referred to reverse mode incorrectly as backward mode
+	- Modified text to correct usage
+   3) Didn't include how users should install/download package
+	- Included more information about dependencies and included commands for users
+   4) Didn't discuss packaging of software
+	- Included basic process we will follow regarding building and uploading package
 
 
 
