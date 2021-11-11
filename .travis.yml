@@ -10,12 +10,13 @@ sudo: false
 before_install:
   - pip install numpy
   - pip install codecov
+  - pip install pytest
   - pip install coverage
 
 install: true
 
 script:
-  - coverage run test.py
+  - coverage run -m pytest
   - coverage report
 
 after_success:

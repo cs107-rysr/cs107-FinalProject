@@ -1,5 +1,5 @@
 import numpy as np 
-import spladtool_forward.functional as F
+import lib.functional as F
 
 
 class Tensor():

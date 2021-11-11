@@ -30,13 +30,11 @@ class Power(Layer):
         if type(p) == float:
             y_data = np.power(x.data.copy(), p)
             y_grad = p * np.power(x.data.copy(), p - 1) * x.grad
-            y = Tensor(y_data, grad=y_grad)
-            return y
         else: 
             y_data = np.power(x.data.copy(), p.data.copy())
             y_grad = p.data.copy() * np.power(x.data.copy(), p.data.copy() - 1) * x.grad
-            y = Tensor(y_data, grad=y_grad)
-            return y
+        y = Tensor(y_data, grad=y_grad)
+        return y
 
 
 class TensorSum(Layer):
