@@ -44,8 +44,8 @@ class Tensor():
     def __pow__(self, y):
         return F.power(self, y)
 
-    def __rpow__(self, *args):
-        raise NotImplementedError
+    def __rpow__(self, y):
+        return F.power(y, self)
 
     def __neg__(self):
         return F.neg(self)
@@ -55,3 +55,6 @@ class Tensor():
 
     def __rsub__(self, y):
         return F.minus(y, self)  
+
+    def __eq__(self, y):
+        return (self.data == y.data).all()

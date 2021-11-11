@@ -26,11 +26,17 @@ class Power(Layer):
         super().__init__()
         self.desc = 'spladtool.Layer.Power'
 
-    def forward(self, x: Tensor, p: float) -> Tensor:
-        y_data = np.power(x.data.copy(), p)
-        y_grad = p * np.power(x.data.copy(), p - 1) * x.grad
-        y = Tensor(y_data, grad=y_grad)
-        return y
+    def forward(self, x: Tensor, p: Union[float, Tensor]) -> Tensor:
+        if type(p) == float:
+            y_data = np.power(x.data.copy(), p)
+            y_grad = p * np.power(x.data.copy(), p - 1) * x.grad
+            y = Tensor(y_data, grad=y_grad)
+            return y
+        else: 
+            y_data = np.power(x.data.copy(), p.data.copy())
+            y_grad = p.data.copy() * np.power(x.data.copy(), p.data.copy() - 1) * x.grad
+            y = Tensor(y_data, grad=y_grad)
+            return y
 
 
 class TensorSum(Layer):
