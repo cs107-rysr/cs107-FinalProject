@@ -58,3 +58,19 @@ class Tensor():
 
     def __eq__(self, y):
         return (self.data == y.data).all()
+
+    def __lt__(self, y):
+        return (self.data < y.data).all()
+
+    def __gt__(self, y):
+        return (self.data > y.data).all()
+
+    def __le__(self, y):
+        return (self.data <= y.data).all()
+
+    def __ge__(self, y):
+        return (self.data >= y.data).all()
+
+    def __ne__(self, y):
+        return (self.data != y.data).all()
+
