@@ -26,13 +26,9 @@ class Power(Layer):
         super().__init__()
         self.desc = 'spladtool.Layer.Power'
 
-    def forward(self, x: Tensor, p: Union[float, Tensor]) -> Tensor:
-        if type(p) == float:
-            y_data = np.power(x.data.copy(), p)
-            y_grad = p * np.power(x.data.copy(), p - 1) * x.grad
-        else: 
-            y_data = np.power(x.data.copy(), p.data.copy())
-            y_grad = p.data.copy() * np.power(x.data.copy(), p.data.copy() - 1) * x.grad
+    def forward(self, x: Tensor, p: float) -> Tensor:
+        y_data = np.power(x.data.copy(), p)
+        y_grad = p * np.power(x.data.copy(), p - 1) * x.grad
         y = Tensor(y_data, grad=y_grad)
         return y
 
@@ -99,6 +95,66 @@ class NumSum(Layer):
             y = np.array(y)
         s_data = x.data + y
         s_grad = x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Exp(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Exp'
+    
+    def forward(self, x: Tensor):
+        s_data = np.exp(x.data)
+        s_grad = np.exp(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+    
+
+class Sin(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Sin'
+    
+    def forward(self, x: Tensor):
+        s_data = np.sin(x.data)
+        s_grad = np.cos(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Cos(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Cos'
+    
+    def forward(self, x: Tensor):
+        s_data = np.cos(x.data)
+        s_grad = -np.sin(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Tan(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Tan'
+    
+    def forward(self, x: Tensor):
+        s_data = np.tan(x.data)
+        s_grad = 1 / (np.cos(x.data) * np.cos(x.data)) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Log(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Log'
+    
+    def forward(self, x: Tensor):
+        s_data = np.log(x.data)
+        s_grad = 1. / x.data * x.grad
         s = Tensor(s_data, s_grad)
         return s
 

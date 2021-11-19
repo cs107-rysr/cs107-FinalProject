@@ -1,5 +1,5 @@
 import numpy as np 
-import lib.functional as F
+import spladtool_forward.functional as F
 
 
 class Tensor():
@@ -44,8 +44,8 @@ class Tensor():
     def __pow__(self, y):
         return F.power(self, y)
 
-    def __rpow__(self, y):
-        return F.power(y, self)
+    def __rpow__(self, *args):
+        raise NotImplementedError
 
     def __neg__(self):
         return F.neg(self)
