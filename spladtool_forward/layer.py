@@ -99,6 +99,66 @@ class NumSum(Layer):
         return s
 
 
+class Exp(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Exp'
+    
+    def forward(self, x: Tensor):
+        s_data = np.exp(x.data)
+        s_grad = np.exp(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+    
+
+class Sin(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Sin'
+    
+    def forward(self, x: Tensor):
+        s_data = np.sin(x.data)
+        s_grad = np.cos(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Cos(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Cos'
+    
+    def forward(self, x: Tensor):
+        s_data = np.cos(x.data)
+        s_grad = -np.sin(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Tan(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Tan'
+    
+    def forward(self, x: Tensor):
+        s_data = np.tan(x.data)
+        s_grad = 1 / (np.cos(x.data) * np.cos(x.data)) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Log(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Log'
+    
+    def forward(self, x: Tensor):
+        s_data = np.log(x.data)
+        s_grad = 1. / x.data * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
 
 
 

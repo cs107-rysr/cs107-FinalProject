@@ -52,5 +52,25 @@ def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, List[int], List[float
         return sumup(x, -y)
 
 
+def exp(x: Tensor):
+    return Exp()(x)
+
+
+def log(x: Tensor):
+    return Log()(x)
+
+
+def sin(x: Tensor):
+    return Sin()(x)
+
+
+def cos(x: Tensor):
+    return Cos()(x)
+
+
+def tan(x: Tensor):
+    return Tan()(x)
+    
+     
 def tensor(x):
     return Tensor(x)

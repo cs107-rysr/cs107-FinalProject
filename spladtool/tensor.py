@@ -19,7 +19,7 @@ class Tensor():
         self.layer.backward(self.dependency)
         
     def __repr__(self):
-    	return str(x)
+    	return str(self)
     	
     def __str__(self):
     	return 'spladtool.Tensor(%s)' % str(self.data)
