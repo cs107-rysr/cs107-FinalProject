@@ -16,7 +16,7 @@ before_install:
 install: true
 
 script:
-  - coverage run -m pytest
+  - bash test.sh
   - coverage report
 
 after_success:
