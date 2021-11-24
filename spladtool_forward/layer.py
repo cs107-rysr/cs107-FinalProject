@@ -76,8 +76,8 @@ class NumProd(Layer):
         super().__init__()
         self.desc = 'spladtool.Layer.NumProd'
 
-    def forward(self, x: Tensor, y: Union[int, float, List[float], List[int], np.ndarray]) -> Tensor:
-        if type(y) == List:
+    def forward(self, x: Tensor, y: Union[int, float, list, np.ndarray]) -> Tensor:
+        if type(y) == list:
             y = np.array(y)
         s_data = x.data * y
         s_grad = x.grad * y
@@ -91,7 +91,7 @@ class NumSum(Layer):
         self.desc = 'spladtool.Layer.NumSum'
 
     def forward(self, x: Tensor, y: Union[int, float, List[float], List[int], np.ndarray]) -> Tensor:
-        if type(y) == List:
+        if type(y) == list:
             y = np.array(y)
         s_data = x.data + y
         s_grad = x.grad
@@ -104,7 +104,7 @@ class Exp(Layer):
         super().__init__()
         self.desc = 'spladtool.Layer.Exp'
     
-    def forward(self, x: Tensor):
+    def forward(self, x: Tensor) -> Tensor:
         s_data = np.exp(x.data)
         s_grad = np.exp(x.data) * x.grad
         s = Tensor(s_data, s_grad)
@@ -116,7 +116,7 @@ class Sin(Layer):
         super().__init__()
         self.desc = 'spladtool.Layer.Sin'
     
-    def forward(self, x: Tensor):
+    def forward(self, x: Tensor) -> Tensor:
         s_data = np.sin(x.data)
         s_grad = np.cos(x.data) * x.grad
         s = Tensor(s_data, s_grad)
@@ -128,7 +128,7 @@ class Cos(Layer):
         super().__init__()
         self.desc = 'spladtool.Layer.Cos'
     
-    def forward(self, x: Tensor):
+    def forward(self, x: Tensor) -> Tensor:
         s_data = np.cos(x.data)
         s_grad = -np.sin(x.data) * x.grad
         s = Tensor(s_data, s_grad)
@@ -140,7 +140,7 @@ class Tan(Layer):
         super().__init__()
         self.desc = 'spladtool.Layer.Tan'
     
-    def forward(self, x: Tensor):
+    def forward(self, x: Tensor) -> Tensor:
         s_data = np.tan(x.data)
         s_grad = 1 / (np.cos(x.data) * np.cos(x.data)) * x.grad
         s = Tensor(s_data, s_grad)
@@ -152,11 +152,73 @@ class Log(Layer):
         super().__init__()
         self.desc = 'spladtool.Layer.Log'
     
-    def forward(self, x: Tensor):
+    def forward(self, x: Tensor) -> Tensor:
         s_data = np.log(x.data)
         s_grad = 1. / x.data * x.grad
         s = Tensor(s_data, s_grad)
         return s
+
+
+class Comparator(Layer):
+    def __init__(self, cmp):
+        super().__init__()
+        self.cmp = cmp
+        self.desc = 'spladtool.Layer.Comparator'
+    
+    def forward(self, x: Tensor, y: Union[float, int, np.ndarray, list, Tensor]) -> Tensor:
+        if type(y) == int or type(y) == float:
+            s_data = (self.cmp(x.data, y))
+            s_grad = np.nan
+            return Tensor(s_data, s_grad)
+        elif type(y) == np.ndarray or type(y) == Tensor:
+            if y.shape != x.shape:
+                raise TypeError(f'param1{type(x)} and param2{type(y)} does not have the same shape')
+            else:
+                if type(y) == np.ndarray:
+                    s_data = (self.cmp(x.data, y))
+                else:
+                    s_data = (self.cmp(x.data, y.data))
+                s_grad = np.nan
+                return Tensor(s_data, s_grad)
+
+
+class Equal(Comparator):
+    def __init__(self):
+        super().__init__(np.equal)
+        self.desc = 'spladtool.Layer.Equal'
+
+
+class NotEqual(Comparator):
+    def __init__(self):
+        super().__init__(np.not_equal)
+        self.desc = 'spladtool.Layer.NotEqual'
+    
+
+class Less(Comparator):
+    def __init__(self):
+        super().__init__(np.less)
+        self.desc = 'spladtool.Layer.Less'
+
+
+class Greater(Comparator):
+    def __init__(self):
+        super().__init__(np.greater)
+        self.desc = 'spladtool.Layer.Greater'
+
+
+class LessEqual(Comparator):
+    def __init__(self):
+        super().__init__(np.less_equal)
+        self.desc = 'spladtool.Layer.LessEqual'
+
+
+class GreaterEqual(Comparator):
+    def __init__(self):
+        super().__init__(np.greater_equal)
+        self.desc = 'spladtool.Layer.GreaterEqual'
+        
+            
+
 
 
 

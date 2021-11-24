@@ -4,18 +4,18 @@ from .layer import *
 from typing import Union, List
 
 
-def power(x: Tensor, p: Union[int, float]) -> Tensor:
+def power(x, p):
     return Power()(x, p)
 
 
-def sumup(x: Tensor, y: Union[int, float, Tensor, np.ndarray, List[int], List[float]]) -> Tensor:
+def sumup(x: Tensor, y: Union[int, float, Tensor, np.ndarray, list]) -> Tensor:
     if type(y) == Tensor:
         return TensorSum()(x, y)
     else:
         return NumSum()(x, y)
 
 
-def prod(x: Tensor, y: Union[int, float, Tensor, np.ndarray, List[int], List[float]]) -> Tensor:
+def prod(x: Tensor, y: Union[int, float, Tensor, np.ndarray, list]) -> Tensor:
     if type(y) == Tensor:
         return TensorProd()(x, y)
     else:
@@ -26,7 +26,7 @@ def inv(x: Tensor) -> Tensor:
     return TensorInv()(x)
 
 
-def div(x: Union[Tensor, int, float, Tensor, np.ndarray, List[int], List[float]], y: Union[int, float, Tensor, np.ndarray, List[int], List[float]]) -> Tensor:
+def div(x: Union[Tensor, int, float, Tensor, np.ndarray, list], y: Union[int, float, Tensor, np.ndarray, list]) -> Tensor:
     if type(y) == Tensor:
         if type(x) == Tensor:
             return prod(x, inv(y))
@@ -41,7 +41,7 @@ def neg(x: Tensor) -> Tensor:
     return prod(x, -1)
 
 
-def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, List[int], List[float]], y: Union[int, float, Tensor, np.ndarray, List[int], List[float]]) -> Tensor:
+def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, list], y: Union[int, float, Tensor, np.ndarray, list]) -> Tensor:
     if type(y) == Tensor:
         if type(x) == Tensor:
             return sumup(x, -y)
@@ -71,6 +71,9 @@ def cos(x: Tensor):
 def tan(x: Tensor):
     return Tan()(x)
     
+
+def equal(x: Tensor, y):
+    return Equal()(x, y)
      
 def tensor(x):
     return Tensor(x)
