@@ -19,6 +19,7 @@ class TestCompare(unittest.TestCase):
         xz3 = (x <= z)
         xz4 = (x >= z)
         xw = (x != w)
+        print(xy)
         self.assertTrue((xy.data == (x.data == y)).all())
         self.assertTrue((xz1.data == (x.data < z)).all())
         self.assertTrue((xz2.data == (x.data > z)).all())
