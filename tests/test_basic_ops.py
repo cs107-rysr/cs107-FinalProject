@@ -87,7 +87,11 @@ class TestBasic(unittest.TestCase):
         self.assertTrue((y.grad == np.array([[2., 2.], [2., 2.]])).all())
         self.assertTrue((z.data == np.array([[-3., -5. / 8], [-7. / 27, -9. / 64]])).all())
         self.assertTrue((z.grad == np.array([[7., 11./16], [15. / 81, 19. / 256]])).all())
- 
+
+    def test_repr(self):
+        x = st.tensor([[1., 2.], [3., 4.]])
+        self.assertTrue(repr(x) == 'spladtool.Tensor(\n[[1. 2.]\n [3. 4.]]\n)')
+
  
 if __name__ == '__main__':
     unittest.main()
