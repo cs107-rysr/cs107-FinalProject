@@ -9,12 +9,12 @@ def newton(f, x_k, tol=1.0e-8, max_it=100):
     root = None
     for k in range(max_it):
         y = f(x_k)
-        dx_k = - (y.data / y.grad)
-        if abs(dx_k) < tol:
+        dx_k = - y.data / y.grad
+        if (abs(dx_k) < tol):
             root = x_k + dx_k
-            print(f"Found root {root.data} at iteration {k+1}")
+            print(f"Found root {root.data} at iter {k+1}")
             break
-        print(f"Iteration {k+1}: Delta x = {dx_k}")
+        print(f"Iter {k+1}: Dx_k = {dx_k}")
         x_k += dx_k
     return root.data
 
