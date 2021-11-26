@@ -170,9 +170,9 @@ class Comparator(Layer):
             s_data = (self.cmp(x.data, y))
             s_grad = np.nan
             return Tensor(s_data, s_grad)
-        elif (type(y) == list and (len(y),len(y[0])) != x.shape):
-            raise TypeError(f'param1{type(x)} and param2{type(y)} does not have the same shape')
-        elif ((type(y) == np.ndarray or type(y) == Tensor) and y.shape != x.shape):
+        elif type(y) == list:
+            y = np.array(y)
+        if (y.shape != x.shape):
             raise TypeError(f'param1{type(x)} and param2{type(y)} does not have the same shape')
         else:
             if type(y) == np.ndarray or type(y) == list:
