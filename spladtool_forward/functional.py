@@ -67,6 +67,9 @@ def cos(x: Tensor):
 def tan(x: Tensor):
     return Tan()(x)
 
+def abs(x: Tensor):
+    return Abs()(x)
+
 def equal(x: Tensor, y):
     return Equal()(x, y)
 
