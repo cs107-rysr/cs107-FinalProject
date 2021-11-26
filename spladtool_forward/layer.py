@@ -175,7 +175,7 @@ class Comparator(Layer):
         if (y.shape != x.shape):
             raise TypeError(f'param1{type(x)} and param2{type(y)} does not have the same shape')
         else:
-            if type(y) == np.ndarray or type(y) == list:
+            if type(y) == np.ndarray:
                 s_data = (self.cmp(x.data, y))
             else:
                 s_data = (self.cmp(x.data, y.data))
