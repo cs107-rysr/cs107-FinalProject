@@ -12,7 +12,7 @@ class Tensor():
             if type(x) != np.ndarray:
                 x = np.array(x)
         self.data = x
-        self.shape = x.shape
+        self._shape = x.shape
         if grad is None:
             grad = np.ones_like(self.data)
         self.grad = grad
@@ -57,4 +57,23 @@ class Tensor():
         return F.minus(y, self)  
 
     def __eq__(self, y):
-        return (self.data == y.data).all()
+        return F.equal(self, y)
+
+    def __lt__(self, y):
+        return F.less(self, y)
+
+    def __gt__(self, y):
+        return F.greater(self, y)
+
+    def __ne__(self, y):
+        return F.not_equal(self, y)
+
+    def __le__(self, y):
+        return F.less_equal(self, y)
+    
+    def __ge__(self, y):
+        return F.greater_equal(self, y)
+
+    @property
+    def shape(self):
+        return self._shape
