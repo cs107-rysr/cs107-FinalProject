@@ -70,7 +70,39 @@ def cos(x: Tensor):
 
 def tan(x: Tensor):
     return Tan()(x)
-    
-     
+
+
+def arcsin(x: Tensor):
+    return ArcSin()(x)
+
+
+def arccos(x: Tensor):
+    return ArcCos()(x)
+
+
+def arctan(x: Tensor):
+    return ArcTan()(x)
+
+
+def sinh(x: Tensor):
+    return Sinh()(x)
+
+
+def cosh(x: Tensor):
+    return Cosh()(x)
+
+
+def tanh(x: Tensor):
+    return Tanh()(x)
+
+
+def logistic(x: Tensor):
+    return Logistic()(x)
+
+
+def sqrt(x: Tensor):
+    return SquareRoot()(x)
+
+
 def tensor(x):
     return Tensor(x)
