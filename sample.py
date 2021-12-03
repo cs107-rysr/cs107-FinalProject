@@ -19,8 +19,8 @@ print('y : ', y)
 # g = -y
 # z = g * f
 # z.backward()
-# z = - y / (x ** 3)
-# z.backward() # execute backward lazily
+z = - y / (x ** 3)
+z.backward() # execute backward lazily
 print('Results:')
 print('z: ', z)
 print('x.grad', x.grad) #dz/dx
