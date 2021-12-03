@@ -2,6 +2,7 @@ import unittest
 import numpy as np 
 import spladtool_forward as st
 
+
 class TestBasic(unittest.TestCase):
     def test_add(self):
         x = np.array([[1.0], [2.0], [3.0]])
