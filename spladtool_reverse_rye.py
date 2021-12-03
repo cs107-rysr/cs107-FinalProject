@@ -3,6 +3,9 @@ from typing import Union, List
 
 
 # TENSOR SCRIPT ========================================
+from project_trial.forward_mode import Tanh
+
+
 class Tensor():
     '''
     A class for lazily-computed variables with auto-differentiation
@@ -16,6 +19,8 @@ class Tensor():
             assert type(x) in [np.ndarray, list, int, float]
             if type(x) != np.ndarray:
                 x = np.array(x)
+                # added this line here - user can now enter in integers within array
+                x = x.astype(float)
         self.data = x
         self._grad = np.zeros_like(self.data)
         self.dependency = None
@@ -27,8 +32,7 @@ class Tensor():
         if g is None:
             g = np.ones_like(self.data)
         assert g.shape == self.data.shape
-        # had to change this to make it work, was originally self._grad += g
-        self._grad = self._grad + g
+        self._grad += g
         if self.dependency is not None:
             self.layer.backward(*self.dependency, g)
 
@@ -150,21 +154,16 @@ def arccos(x: Tensor):
     return ArcCos()(x)
 
 def arctan(x: Tensor):
-    pass
-    # return ArcTan()(x)
+    return ArcTan()(x)
 
 def sinh(x: Tensor):
-    pass
-    # return Sinh()(x)
+    return Sinh()(x)
 
 def cosh(x: Tensor):
-    pass
-    # return Cosh()(x)
+    return Cosh()(x)
 
 def tanh(x: Tensor):
-    pass
-    # return Tanh()(x)
-
+    return Tanh()(x)
 # FUNCTIONAL SCRIPT ====================================
 
 
@@ -402,11 +401,69 @@ class ArcCos(Layer):
         grad = g * (-1. / np.sqrt(1 - x.data**2))
         x.backward(grad)
 
-# def arctan(x: Tensor):
-# def sinh(x: Tensor):
-# def cosh(x: Tensor):
-# def tanh(x: Tensor):
+class ArcTan(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.ArcTan'
 
+    def forward(self, x):
+        s_data = np.arctan(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (1 / (1 + x.data**2))
+        x.backward(grad)
+
+class Sinh(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.Sinh'
+
+    def forward(self, x):
+        s_data = np.sinh(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * np.cosh(x.data)
+        x.backward(grad)
+
+class Cosh(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.Cosh'
+
+    def forward(self, x):
+        s_data = np.cosh(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * np.sinh(x.data)
+        x.backward(grad)
+
+class Tanh(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.Cosh'
+
+    def forward(self, x):
+        s_data = np.tanh(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (1 - (np.tanh(x.data)**2))
+        x.backward(grad)
 
 def tensor(x):
     return Tensor(x)
