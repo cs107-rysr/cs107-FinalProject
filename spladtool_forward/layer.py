@@ -260,7 +260,7 @@ class SquareRoot(Layer):
 
     def forward(self, x: Tensor):
         s_data = np.sqrt(x.data)
-        s_grad = (1. / 2 * np.sqrt(x.data)) * x.grad
+        s_grad = (1. / (2 * np.sqrt(x.data))) * x.grad
         s = Tensor(s_data, s_grad)
         return s
 

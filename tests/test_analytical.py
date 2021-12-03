@@ -42,7 +42,66 @@ class TestAnalytical(unittest.TestCase):
         self.assertTrue((w.grad == w_grad).all())
         self.assertTrue((self.near(u.grad, u_grad)).all())
         self.assertTrue((self.near(v.grad, v_grad)).all())
- 
- 
+
+        a_data = np.array([0.1, 0.3])
+        a = st.tensor([0.1, 0.3])
+
+        b_data = 3 * a_data
+        b_grad = 3
+        b = 3 * a
+
+        c_data = np.sinh(b_data)
+        c_grad = b_grad * np.cosh(b_data)
+        c = F.sinh(b)
+
+        d_data = np.cosh(b_data)
+        d_grad = b_grad * np.sinh(b_data)
+        d = F.cosh(b)
+
+        e_data = np.tanh(b_data)
+        e_grad = b_grad * (1. / np.cosh(b_data)**2)
+        e = F.tanh(b)
+
+        f_data = np.exp(b_data) / (np.exp(b_data) + 1)
+        f_grad = b_grad * (np.exp(b_data) / (np.exp(b_data) + 1)**2)
+        f = F.logistic(b)
+
+        g_data = np.sqrt(b_data)
+        g_grad = b_grad * (1 / (2 * np.sqrt(b_data)))
+        g = F.sqrt(b)
+
+        h_data = np.arcsin(b_data)
+        h_grad = b_grad * (1 / (np.sqrt(1 - b_data**2)))
+        h = F.arcsin(b)
+
+        i_data = np.arccos(b_data)
+        i_grad = b_grad * (-1 / (np.sqrt(1 - b_data**2)))
+        i = F.arccos(b)
+
+        j_data = np.arctan(b_data)
+        j_grad = b_grad * (1 / (1 + b_data**2))
+        j = F.arctan(b)
+
+        self.assertTrue((b.data == b_data).all())
+        self.assertTrue((b.grad == b_grad).all())
+        self.assertTrue((c.data == c_data).all())
+        self.assertTrue((c.grad == c_grad).all())
+        self.assertTrue((d.data == d_data).all())
+        self.assertTrue((d.grad == d_grad).all())
+        self.assertTrue((e.data == e_data).all())
+        self.assertTrue((e.grad == e_grad).all())
+        self.assertTrue((f.data == f_data).all())
+        self.assertTrue((f.grad == f_grad).all())
+        self.assertTrue((g.data == g_data).all())
+        self.assertTrue((g.grad == g_grad).all())
+        self.assertTrue((h.data == h_data).all())
+        self.assertTrue((h.grad == h_grad).all())
+        self.assertTrue((i.data == i_data).all())
+        self.assertTrue((i.grad == i_grad).all())
+        self.assertTrue((j.data == j_data).all())
+        self.assertTrue((j.grad == j_grad).all())
+
+        # still need to test forward mode comparison operators
+
 if __name__ == '__main__':
     unittest.main()
