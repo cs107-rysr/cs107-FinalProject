@@ -33,10 +33,6 @@ y = str.Tensor([0.7, 1])
 print('Input:')
 print('x : ', x.data)
 print('y : ', y.data)
-# w1 = x
-# w2 = w1^3
-# z = w2
-# z.backward()
 print('Results:')
 z = str.tanh(2*x*y)
 print('z: ', z)
