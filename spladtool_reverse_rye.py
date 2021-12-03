@@ -147,22 +147,22 @@ def sin(x: Tensor) -> Tensor:
 def cos(x: Tensor) -> Tensor:
     return Cos()(x)
 
-def arcsin(x: Tensor):
+def arcsin(x: Tensor) -> Tensor:
     return ArcSin()(x)
 
-def arccos(x: Tensor):
+def arccos(x: Tensor) -> Tensor:
     return ArcCos()(x)
 
-def arctan(x: Tensor):
+def arctan(x: Tensor) -> Tensor:
     return ArcTan()(x)
 
-def sinh(x: Tensor):
+def sinh(x: Tensor) -> Tensor:
     return Sinh()(x)
 
-def cosh(x: Tensor):
+def cosh(x: Tensor) -> Tensor:
     return Cosh()(x)
 
-def tanh(x: Tensor):
+def tanh(x: Tensor) -> Tensor:
     return Tanh()(x)
 # FUNCTIONAL SCRIPT ====================================
 
