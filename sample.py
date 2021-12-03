@@ -3,7 +3,6 @@ import numpy as np
 import spladtool_reverse_rye as str
 
 print('------------------------In reverse mode------------------------')
-print('------------------------Two inputs-----------------------------')
 print('Inputs:')
 x = str.Tensor([1., 2.])
 y = 2 * x + 1
@@ -27,7 +26,6 @@ print('x.grad', x.grad) #dz/dx
 print('y.grad', y.grad) #dz/dy
 
 print('------------------------In reverse mode------------------------')
-print('------------------------One input-----------------------------')
 x = str.Tensor([2])
 y = str.Tensor([2])
 print('Input:')
