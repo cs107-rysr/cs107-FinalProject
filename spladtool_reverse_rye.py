@@ -3,9 +3,6 @@ from typing import Union, List
 
 
 # TENSOR SCRIPT ========================================
-from project_trial.forward_mode import Tanh
-
-
 class Tensor():
     '''
     A class for lazily-computed variables with auto-differentiation
