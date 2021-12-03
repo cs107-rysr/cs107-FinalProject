@@ -170,6 +170,100 @@ class Log(Layer):
         return s
 
 
+class ArcSin(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.ArcSin'
+
+    def forward(self, x: Tensor):
+        s_data = np.arcsin(x.data)
+        s_grad = (1. / np.sqrt(1 - x.data**2)) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class ArcCos(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.ArcCos'
+
+    def forward(self, x: Tensor):
+        s_data = np.arccos(x.data)
+        s_grad = (-1. / np.sqrt(1 - x.data**2)) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class ArcTan(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.ArcTan'
+
+    def forward(self, x: Tensor):
+        s_data = np.arctan(x.data)
+        s_grad = (1. / (1 + x.data**2)) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Sinh(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Sinh'
+
+    def forward(self, x: Tensor):
+        s_data = np.sinh(x.data)
+        s_grad = np.cosh(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Cosh(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Cosh'
+
+    def forward(self, x: Tensor):
+        s_data = np.cosh(x.data)
+        s_grad = np.sinh(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Tanh(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Tanh'
+
+    def forward(self, x: Tensor):
+        s_data = np.tanh(x.data)
+        s_grad = (1. / np.cosh(x.data)**2) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+
+class Logistic(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Logistic'
+
+    def forward(self, x: Tensor):
+        s_data = np.exp(x.data) / (np.exp(x.data) + 1)
+        s_grad = (np.exp(x.data) / (np.exp(x.data) + 1)**2) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+class SquareRoot(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.SquareRoot'
+
+    def forward(self, x: Tensor):
+        s_data = np.sqrt(x.data)
+        s_grad = (1. / 2 * np.sqrt(x.data)) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
 class Comparator(Layer):
     def __init__(self, cmp):
         super().__init__()
@@ -230,7 +324,6 @@ class GreaterEqual(Comparator):
         self.desc = 'spladtool.Layer.GreaterEqual'
         
             
-
 
 
 
