@@ -150,16 +150,20 @@ def arccos(x: Tensor):
     return ArcCos()(x)
 
 def arctan(x: Tensor):
-    return ArcTan()(x)
+    pass
+    # return ArcTan()(x)
 
 def sinh(x: Tensor):
-    return Sinh()(x)
+    pass
+    # return Sinh()(x)
 
 def cosh(x: Tensor):
-    return Cosh()(x)
+    pass
+    # return Cosh()(x)
 
 def tanh(x: Tensor):
-    return Tanh()(x)
+    pass
+    # return Tanh()(x)
 
 # FUNCTIONAL SCRIPT ====================================
 
@@ -313,10 +317,23 @@ class Exp(Layer):
         return s
 
     def backward(self, x, g):
-        # g = dz/dy
-        # y = sin(x) z = f(y) z is the output
-        # dz/dx = dz/dy * dy/dx = g * dy/dx = g * cos(x)
         grad = g * np.exp(x.data)
+        x.backward(grad)
+
+class Log(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.Log'
+
+    def forward(self, x):
+        s_data = np.log(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (1. / x.data)
         x.backward(grad)
 
 class Sin(Layer):
@@ -332,9 +349,6 @@ class Sin(Layer):
         return s
 
     def backward(self, x, g):
-        # g = dz/dy
-        # y = sin(x) z = f(y) z is the output
-        # dz/dx = dz/dy * dy/dx = g * dy/dx = g * cos(x)
         grad = g * np.cos(x.data)
         x.backward(grad)
 
@@ -350,11 +364,49 @@ class Cos(Layer):
         s.layer = self
         return s
 
-    def backward(self, x, g): # g = dz/dy
-        # y = sin(x) z = f(y) z is the output
-        # dz/dx = dz/dy * dy/dx = g * dy/dx = g * cos(x)
+    def backward(self, x, g):
         grad = g * np.sin(x.data)
         x.backward(grad)
+
+# need to raise error?? derivative is undefined outside of [-1,1]
+# both ArcSin and ArcCos work with 1 input, but not with 2 inputs (e.g. z = arcsin(x*y)
+class ArcSin(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.ArcSin'
+
+    def forward(self, x):
+        s_data = np.arcsin(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (1. / np.sqrt(1 - x.data**2))
+        x.backward(grad)
+
+class ArcCos(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.ArcCos'
+
+    def forward(self, x):
+        s_data = np.arccos(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (-1. / np.sqrt(1 - x.data**2))
+        x.backward(grad)
+
+# def arctan(x: Tensor):
+# def sinh(x: Tensor):
+# def cosh(x: Tensor):
+# def tanh(x: Tensor):
+
 
 def tensor(x):
     return Tensor(x)
