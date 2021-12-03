@@ -8,7 +8,7 @@ class Tensor():
         if x is None:
             self.data = None
         else:
-            assert type(x) in [np.ndarray, list, int, float]
+            assert type(x) in [np.ndarray, list, int, float, np.float_]
             if type(x) != np.ndarray:
                 x = np.array(x)
         self.data = x

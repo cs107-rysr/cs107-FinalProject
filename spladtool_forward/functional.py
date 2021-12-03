@@ -91,6 +91,9 @@ def logistic(x: Tensor):
 def sqrt(x: Tensor):
     return SquareRoot()(x)
 
+def abs(x: Tensor):
+    return Abs()(x)
+
 def equal(x: Tensor, y):
     return Equal()(x, y)
 

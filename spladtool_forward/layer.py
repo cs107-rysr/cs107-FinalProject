@@ -146,6 +146,17 @@ class Tan(Layer):
         s = Tensor(s_data, s_grad)
         return s
 
+class Abs(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = "spladtool.Layer.Abs"
+
+    def forward(self, x: Tensor) -> Tensor:
+        s_data = np.abs(x.data)
+        s_grad = x.data / np.abs(x.data) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
 
 class Log(Layer):
     def __init__(self):
