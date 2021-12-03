@@ -1,6 +1,6 @@
 import unittest
 import numpy as np 
-import spladtool_reverse_rye as str
+import spladtool_reverse as str
 
 print('------------------------In reverse mode------------------------')
 print('Example 1: z = -y / x^3')
