@@ -4,18 +4,18 @@ from .layer import *
 from typing import Union, List
 
 
-def power(x: Tensor, p: Union[int, float]) -> Tensor:
+def power(x, p):
     return Power()(x, p)
 
 
-def sumup(x: Tensor, y: Union[int, float, Tensor, np.ndarray, List[int], List[float]]) -> Tensor:
+def sumup(x: Tensor, y: Union[int, float, Tensor, np.ndarray, list]) -> Tensor:
     if type(y) == Tensor:
         return TensorSum()(x, y)
     else:
         return NumSum()(x, y)
 
 
-def prod(x: Tensor, y: Union[int, float, Tensor, np.ndarray, List[int], List[float]]) -> Tensor:
+def prod(x: Tensor, y: Union[int, float, Tensor, np.ndarray, list]) -> Tensor:
     if type(y) == Tensor:
         return TensorProd()(x, y)
     else:
@@ -26,7 +26,7 @@ def inv(x: Tensor) -> Tensor:
     return TensorInv()(x)
 
 
-def div(x: Union[Tensor, int, float, Tensor, np.ndarray, List[int], List[float]], y: Union[int, float, Tensor, np.ndarray, List[int], List[float]]) -> Tensor:
+def div(x: Union[Tensor, int, float, Tensor, np.ndarray, list], y: Union[int, float, Tensor, np.ndarray, list]) -> Tensor:
     if type(y) == Tensor:
         if type(x) == Tensor:
             return prod(x, inv(y))
@@ -41,7 +41,7 @@ def neg(x: Tensor) -> Tensor:
     return prod(x, -1)
 
 
-def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, List[int], List[float]], y: Union[int, float, Tensor, np.ndarray, List[int], List[float]]) -> Tensor:
+def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, list], y: Union[int, float, Tensor, np.ndarray, list]) -> Tensor:
     if type(y) == Tensor:
         if type(x) == Tensor:
             return sumup(x, -y)
@@ -55,22 +55,38 @@ def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, List[int], List[float
 def exp(x: Tensor):
     return Exp()(x)
 
-
 def log(x: Tensor):
     return Log()(x)
-
 
 def sin(x: Tensor):
     return Sin()(x)
 
-
 def cos(x: Tensor):
     return Cos()(x)
 
-
 def tan(x: Tensor):
     return Tan()(x)
+
+def abs(x: Tensor):
+    return Abs()(x)
+
+def equal(x: Tensor, y):
+    return Equal()(x, y)
+
+def less(x: Tensor, y):
+    return Less()(x,y)
+
+def not_equal(x:Tensor, y):
+    return NotEqual()(x,y)
     
+def greater(x: Tensor, y):
+    return Greater()(x,y)
+
+def less_equal(x: Tensor, y):
+    return LessEqual()(x,y)
+
+def greater_equal(x: Tensor, y):
+    return GreaterEqual()(x,y)
      
 def tensor(x):
     return Tensor(x)
