@@ -40,6 +40,7 @@ class TestAnalytical(unittest.TestCase):
         self.assertTrue((y.grad == y_grad).all())
         self.assertTrue((z.grad == z_grad).all())
         self.assertTrue((w.grad == w_grad).all())
+        
         self.assertTrue((self.near(u.grad, u_grad)).all())
         self.assertTrue((self.near(v.grad, v_grad)).all())
  

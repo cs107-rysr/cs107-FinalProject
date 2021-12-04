@@ -248,8 +248,8 @@ class Logistic(Layer):
         self.desc = 'spladtool.Layer.Logistic'
 
     def forward(self, x: Tensor):
-        s_data = np.exp(x.data) / (np.exp(x.data) + 1)
-        s_grad = (np.exp(x.data) / (np.exp(x.data) + 1)**2) * x.grad
+        s_data = np.exp(x.data) / (np.exp(-x.data) + 1)
+        s_grad = np.exp(x.data) / (1 + np.exp(x.data))**2 * x.grad
         s = Tensor(s_data, s_grad)
         return s
 
