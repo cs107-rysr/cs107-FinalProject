@@ -101,7 +101,13 @@ class TestAnalytical(unittest.TestCase):
         self.assertTrue((j.data == j_data).all())
         self.assertTrue((j.grad == j_grad).all())
 
-        # still need to test forward mode comparison operators
+        self.assertRaises(ValueError, F.sqrt, st.tensor([-1]))
+        self.assertRaises(ValueError, F.log, st.tensor([-1]))
+        self.assertRaises(ValueError, F.arcsin, st.tensor([-5]))
+        self.assertRaises(ValueError, F.arcsin, st.tensor([5]))
+        self.assertRaises(ValueError, F.arccos, st.tensor([-5]))
+        self.assertRaises(ValueError, F.arccos, st.tensor([5]))
+
 
 if __name__ == '__main__':
     unittest.main()
