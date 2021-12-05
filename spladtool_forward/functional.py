@@ -112,5 +112,5 @@ def less_equal(x: Tensor, y):
 def greater_equal(x: Tensor, y):
     return GreaterEqual()(x,y)
      
-def tensor(x):
-    return Tensor(x)
+def tensor(x, seed=None):
+    return Tensor(x,seed)
