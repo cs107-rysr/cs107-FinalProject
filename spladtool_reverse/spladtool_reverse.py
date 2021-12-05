@@ -138,6 +138,9 @@ def exp(x: Tensor) -> Tensor:
 def log(x: Tensor) -> Tensor:
     return Log()(x)
 
+def sqrt(x: Tensor) -> Tensor:
+    return SquareRoot()(x)
+
 def sin(x: Tensor) -> Tensor:
     return Sin()(x)
 
@@ -322,6 +325,8 @@ class Log(Layer):
         self.name = 'spladtool_reverse.Layer.Log'
 
     def forward(self, x):
+        if (x.data <= 0).any():
+            raise ValueError('Cannot take the log of something less than or equal to 0.')
         s_data = np.log(x.data)
         s = Tensor(s_data)
         s.dependency = [x]
@@ -330,6 +335,25 @@ class Log(Layer):
 
     def backward(self, x, g):
         grad = g * (1. / x.data)
+        x.backward(grad)
+
+
+class SquareRoot(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.SquareRoot'
+
+    def forward(self, x):
+        if (x.data <= 0).any():
+            raise ValueError('Cannot take the square root of something less than 0.')
+        s_data = np.sqrt(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (1 / (2*np.sqrt(x.data)))
         x.backward(grad)
 
 class Sin(Layer):
@@ -372,6 +396,8 @@ class ArcSin(Layer):
         self.name = 'spladtool_reverse.Layer.ArcSin'
 
     def forward(self, x):
+        if (x.data < -1).any() or (x.data > 1).any():
+            raise ValueError('Cannot perform ArcSin on something outside the range of [-1,1].')
         s_data = np.arcsin(x.data)
         s = Tensor(s_data)
         s.dependency = [x]
@@ -388,6 +414,8 @@ class ArcCos(Layer):
         self.name = 'spladtool_reverse.Layer.ArcCos'
 
     def forward(self, x):
+        if (x.data < -1).any() or (x.data > 1).any():
+            raise ValueError('Cannot perform ArcCos on something outside the range of [-1,1].')
         s_data = np.arccos(x.data)
         s = Tensor(s_data)
         s.dependency = [x]
