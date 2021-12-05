@@ -4,6 +4,16 @@ import spladtool_forward as st
 
 
 class TestBasic(unittest.TestCase):
+    
+    def test_seed(self):
+        seed = [[1.], [0], [0]]
+        st_x = st.tensor([[1.0], [2.0], [3.0]], seed=seed)
+        st_z = st_x + 4
+        print('x : ', st_x)
+        print('z : ', st_z)
+        print('z.grad: ', st_z.grad)
+        self.assertTrue((st_z.grad == np.array([[1.],[0],[0]])).all())
+        
     def test_add(self):
         x = np.array([[1.0], [2.0], [3.0]])
         z = x + 4
