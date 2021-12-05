@@ -164,6 +164,8 @@ class Log(Layer):
         self.desc = 'spladtool.Layer.Log'
     
     def forward(self, x: Tensor) -> Tensor:
+        if (x.data <= 0).any():
+            raise ValueError('Cannot take the log of something less than or equal to 0.')
         s_data = np.log(x.data)
         s_grad = 1. / x.data * x.grad
         s = Tensor(s_data, s_grad)
@@ -176,6 +178,8 @@ class ArcSin(Layer):
         self.desc = 'spladtool.Layer.ArcSin'
 
     def forward(self, x: Tensor):
+        if (x.data < -1).any() or (x.data > 1).any():
+            raise ValueError('Cannot perform ArcSin on something outside the range of [-1,1].')
         s_data = np.arcsin(x.data)
         s_grad = (1. / np.sqrt(1 - x.data**2)) * x.grad
         s = Tensor(s_data, s_grad)
@@ -188,6 +192,8 @@ class ArcCos(Layer):
         self.desc = 'spladtool.Layer.ArcCos'
 
     def forward(self, x: Tensor):
+        if (x.data < -1).any() or (x.data > 1).any():
+            raise ValueError('Cannot perform ArcCos on something outside the range of [-1,1].')
         s_data = np.arccos(x.data)
         s_grad = (-1. / np.sqrt(1 - x.data**2)) * x.grad
         s = Tensor(s_data, s_grad)
@@ -259,6 +265,8 @@ class SquareRoot(Layer):
         self.desc = 'spladtool.Layer.SquareRoot'
 
     def forward(self, x: Tensor):
+        if (x.data <= 0).any():
+            raise ValueError('Cannot take the square root of something less than 0.')
         s_data = np.sqrt(x.data)
         s_grad = (1. / (2 * np.sqrt(x.data))) * x.grad
         s = Tensor(s_data, s_grad)
