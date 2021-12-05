@@ -1,6 +1,6 @@
 import unittest
 import numpy as np 
-import spladtool_reverse as str
+import spladtool_reverse.spladtool_reverse as str
 
 
 class TestBasicReverse(unittest.TestCase):
