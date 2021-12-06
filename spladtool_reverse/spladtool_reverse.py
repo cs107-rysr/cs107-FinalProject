@@ -537,7 +537,7 @@ class Comparator(Layer):
         if type(y) == int or type(y) == float:
             s_data = (self.cmp(x.data, y))
             s_grad = np.nan
-            return Tensor(s_data, s_grad)
+            return Tensor(s_data)
         elif type(y) == list:
             y = np.array(y)
         if (y.shape != x.shape):
@@ -548,7 +548,7 @@ class Comparator(Layer):
             else:
                 s_data = (self.cmp(x.data, y.data))
             s_grad = np.nan
-            return Tensor(s_data, s_grad)
+            return Tensor(s_data)
 
 
 class Equal(Comparator):
