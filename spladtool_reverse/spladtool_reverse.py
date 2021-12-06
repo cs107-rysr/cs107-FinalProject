@@ -71,6 +71,24 @@ class Tensor():
 
     def __rsub__(self, y):
         return minus(y, self)
+    
+    def __eq__(self, y):
+        return equal(self, y)
+
+    def __lt__(self, y):
+        return less(self, y)
+
+    def __gt__(self, y):
+        return greater(self, y)
+
+    def __ne__(self, y):
+        return not_equal(self, y)
+
+    def __le__(self, y):
+        return less_equal(self, y)
+    
+    def __ge__(self, y):
+        return greater_equal(self, y)
 
     @property
     def shape(self):
@@ -164,6 +182,25 @@ def cosh(x: Tensor) -> Tensor:
 
 def tanh(x: Tensor) -> Tensor:
     return Tanh()(x)
+
+def equal(x: Tensor, y) -> Tensor:
+    return Equal()(x, y)
+
+def less(x: Tensor, y) -> Tensor:
+    return Less()(x,y)
+
+def not_equal(x:Tensor, y) -> Tensor:
+    return NotEqual()(x,y)
+    
+def greater(x: Tensor, y) -> Tensor:
+    return Greater()(x,y)
+
+def less_equal(x: Tensor, y) -> Tensor:
+    return LessEqual()(x,y)
+
+def greater_equal(x: Tensor, y) -> Tensor:
+    return GreaterEqual()(x,y)
+
 # FUNCTIONAL SCRIPT ====================================
 
 
@@ -489,6 +526,65 @@ class Tanh(Layer):
     def backward(self, x, g):
         grad = g * (1 - (np.tanh(x.data)**2))
         x.backward(grad)
+        
+class Comparator(Layer):
+    def __init__(self, cmp):
+        super().__init__()
+        self.cmp = cmp
+        self.desc = 'spladtool_reverse.Layer.Comparator'
+    
+    def forward(self, x: Tensor, y: Union[float, int, np.ndarray, list, Tensor]) -> Tensor:
+        if type(y) == int or type(y) == float:
+            s_data = (self.cmp(x.data, y))
+            s_grad = np.nan
+            return Tensor(s_data, s_grad)
+        elif type(y) == list:
+            y = np.array(y)
+        if (y.shape != x.shape):
+            raise TypeError(f'param1{type(x)} and param2{type(y)} does not have the same shape')
+        else:
+            if type(y) == np.ndarray:
+                s_data = (self.cmp(x.data, y))
+            else:
+                s_data = (self.cmp(x.data, y.data))
+            s_grad = np.nan
+            return Tensor(s_data, s_grad)
+
+
+class Equal(Comparator):
+    def __init__(self):
+        super().__init__(np.equal)
+        self.desc = 'spladtool_reverse.Layer.Equal'
+
+
+class NotEqual(Comparator):
+    def __init__(self):
+        super().__init__(np.not_equal)
+        self.desc = 'spladtool_reverse.Layer.NotEqual'
+    
+
+class Less(Comparator):
+    def __init__(self):
+        super().__init__(np.less)
+        self.desc = 'spladtool_reverse.Layer.Less'
+
+
+class Greater(Comparator):
+    def __init__(self):
+        super().__init__(np.greater)
+        self.desc = 'spladtool_reverse.Layer.Greater'
+
+
+class LessEqual(Comparator):
+    def __init__(self):
+        super().__init__(np.less_equal)
+        self.desc = 'spladtool_reverse.Layer.LessEqual'
+
+
+class GreaterEqual(Comparator):
+    def __init__(self):
+        super().__init__(np.greater_equal)
+        self.desc = 'spladtool_reverse.Layer.GreaterEqual'
 
 def tensor(x):
     return Tensor(x)

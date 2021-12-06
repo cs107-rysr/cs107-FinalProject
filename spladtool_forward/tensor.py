@@ -3,7 +3,7 @@ import spladtool_forward.functional as F
 
 
 class Tensor():
-    def __init__(self, x=None, grad=None):
+    def __init__(self, x=None, grad=None, seed=None):
         super().__init__()
         if x is None:
             self.data = None
@@ -15,7 +15,9 @@ class Tensor():
         self._shape = x.shape
         if grad is None:
             grad = np.ones_like(self.data)
-        self.grad = grad
+        if seed is None:
+            seed = np.ones_like((x.shape[0],))
+        self.grad = grad * seed
         
     def __repr__(self):
     	return str(self)
