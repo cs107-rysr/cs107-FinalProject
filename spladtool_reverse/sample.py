@@ -41,9 +41,21 @@ print('x.grad', x.grad) #dz/dx
 print('y.grad', y.grad) #dz/dx
 
 print('------------------------In reverse mode------------------------')
+print('Example: x >= y')
+x = str.Tensor([2,-2])
+y = str.Tensor([-2,0])
+print('Input:')
+print('x : ', x.data)
+print('y : ', y.data)
+print('Results:')
+z = (x > y)
+print('z.data', z.data)
+print('z.grad', x.grad)
+
+print('------------------------In reverse mode------------------------')
 print('Example: z = log(x)')
-print('**************Should raise error**************')
-x = str.Tensor([-2])
+print('**************Should raise an error if we input negative number**************')
+x = str.Tensor([2])
 # y = str.Tensor([0.7, 1])
 print('Input:')
 print('x : ', x.data)
@@ -54,4 +66,3 @@ print('z: ', z)
 z.backward() # execute backward lazily
 print('x.grad', x.grad) #dz/dx
 # print('y.grad', y.grad) #dz/dx
-
