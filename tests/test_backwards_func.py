@@ -1,7 +1,7 @@
 import unittest
 import numpy as np 
 import torch
-import spladtool_reverse.spladtool_reverse as str
+import spladtool.spladtool_reverse as str
 
 
 class TestBackwardBasicOps(unittest.TestCase):

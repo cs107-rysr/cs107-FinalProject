@@ -1,13 +1,13 @@
 import unittest
 import numpy as np 
-from spladtool.spladtool_forward import spladtool_f as sf
+import spladtool.spladtool_forward as stf
 
 
 class TestBasic(unittest.TestCase):
     
     def test_seed(self):
         seed = [[1.], [0], [0]]
-        sf_x = sf.tensor([[1.0], [2.0], [3.0]], seed=seed)
+        sf_x = stf.tensor([[1.0], [2.0], [3.0]], seed=seed)
         sf_z = sf_x + 4
         print('x : ', sf_x)
         print('z : ', sf_z)
@@ -17,7 +17,7 @@ class TestBasic(unittest.TestCase):
     def test_add(self):
         x = np.array([[1.0], [2.0], [3.0]])
         z = x + 4
-        sf_x = sf.tensor([[1.0], [2.0], [3.0]])
+        sf_x = stf.tensor([[1.0], [2.0], [3.0]])
         sf_z = sf_x + 4
         print('x : ', sf_x)
         print('z : ', sf_z)
@@ -29,7 +29,7 @@ class TestBasic(unittest.TestCase):
     def test_sub(self):
         x = np.array([[1.0], [2.0], [3.0]])
         z = x - 4
-        sf_x = sf.tensor([[1.0], [2.0], [3.0]])
+        sf_x = stf.tensor([[1.0], [2.0], [3.0]])
         sf_z = sf_x - 4
         print('x : ', sf_x)
         print('z : ', sf_z)
@@ -41,7 +41,7 @@ class TestBasic(unittest.TestCase):
     def test_mult(self):
         x = np.array([[1.0], [2.0], [3.0]])
         z = 3 * x
-        sf_x = sf.tensor([[1.0], [2.0], [3.0]])
+        sf_x = stf.tensor([[1.0], [2.0], [3.0]])
         sf_z = 3 * sf_x
         print('x : ', sf_x)
         print('z : ', sf_z)
@@ -53,7 +53,7 @@ class TestBasic(unittest.TestCase):
     def test_div(self):
         x = np.array([[1.0], [2.0], [3.0]])
         z = x / 4
-        sf_x = sf.tensor([[1.0], [2.0], [3.0]])
+        sf_x = stf.tensor([[1.0], [2.0], [3.0]])
         sf_z = sf_x / 4
         print('x : ', sf_x)
         print('z : ', sf_z)
@@ -65,7 +65,7 @@ class TestBasic(unittest.TestCase):
     def test_pow_consf(self):
         x = np.array([[1.0], [2.0], [3.0]])
         z = x ** 3
-        sf_x = sf.tensor(x)
+        sf_x = stf.tensor(x)
         sf_z = sf_x ** 3
         print('x : ', sf_x)
         print('z : ', sf_z)
@@ -76,7 +76,7 @@ class TestBasic(unittest.TestCase):
     def test_neg(self):
         x = np.array([[1.0], [2.0], [3.0]])
         z = -x 
-        sf_x = sf.tensor(x)
+        sf_x = stf.tensor(x)
         sf_z = -sf_x
         print('x : ', sf_x)
         print('z : ', sf_z)
@@ -86,7 +86,7 @@ class TestBasic(unittest.TestCase):
         self.assertTrue((sf_z.grad == np.array([[-1.],[-1.],[-1.]])).all())
     
     def test_synthesis(self):
-        x = sf.tensor([[1., 2.], [3., 4.]])
+        x = stf.tensor([[1., 2.], [3., 4.]])
         y = 2 * x + 1
         z = - y / (x ** 3)
         print('x : ', x)
@@ -100,7 +100,7 @@ class TestBasic(unittest.TestCase):
         self.assertTrue((z.grad == np.array([[7., 11./16], [15. / 81, 19. / 256]])).all())
 
     def test_repr(self):
-        x = sf.tensor([[1., 2.], [3., 4.]])
+        x = stf.tensor([[1., 2.], [3., 4.]])
         self.assertTrue(repr(x) == 'spladtool.Tensor(\n[[1. 2.]\n [3. 4.]]\n)')
 
  

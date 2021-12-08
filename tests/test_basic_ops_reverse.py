@@ -1,6 +1,6 @@
 import unittest
 import numpy as np 
-from spladtool.spladtool_reverse import spladtool_r as sr
+import spladtool.spladtool_reverse as str
 
 
 class TestBasicReverse(unittest.TestCase):
@@ -8,7 +8,7 @@ class TestBasicReverse(unittest.TestCase):
         return np.abs(x - y).sum() < 1e-7
 
     def test_define_layer(self):
-        class DefinedLayer(sr.Layer):
+        class DefinedLayer(str.Layer):
             def __init__(self):
                 super().__init__()
                 self.name = 'my_defined_layer'
@@ -19,7 +19,7 @@ class TestBasicReverse(unittest.TestCase):
                 return z
 
         defined_layer = DefinedLayer()
-        x = sr.tensor([[1., 2.], [3., 4.]])
+        x = str.tensor([[1., 2.], [3., 4.]])
         z = defined_layer(x)
         z.backward()
         # x.grad
