@@ -653,3 +653,45 @@ def tensor(x):
     return Tensor(x)
 
 # LAYER SCRIPT ====================================
+
+
+
+# LOSS FUNCTIONS ==================================
+
+class Mean(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.Mean'
+
+    def forward(self, x):
+        s_data = np.mean(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (1 / x.shape)
+        x.backward(grad)
+    
+
+class MSE(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.MSE'
+
+    def forward(self, x, y):
+        diff = y - x
+        diff_squared = diff ** 2
+        mse = diff_squared.mean()  
+        return mse.backward()
+        
+
+class CE(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.CE'
+
+    def forward(self, x, y):
+        ce = (np.log(y) * x).mean()
+        return ce.backward()
