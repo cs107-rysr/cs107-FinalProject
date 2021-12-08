@@ -165,6 +165,9 @@ def sin(x: Tensor) -> Tensor:
 def cos(x: Tensor) -> Tensor:
     return Cos()(x)
 
+def tan(x: Tensor) -> Tensor:
+    return Tan()(x)
+
 def arcsin(x: Tensor) -> Tensor:
     return ArcSin()(x)
 
@@ -422,8 +425,25 @@ class Cos(Layer):
         return s
 
     def backward(self, x, g):
-        grad = g * np.sin(x.data)
+        grad = g * -np.sin(x.data)
         x.backward(grad)
+
+class Tan(Layer):
+    def __init__(self):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.Tan'
+
+    def forward(self, x):
+        s_data = np.tan(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (1. / np.cos(x.data)) ** 2
+        x.backward(grad)
+
 
 # need to raise error?? derivative is undefined outside of [-1,1]
 # both ArcSin and ArcCos work with 1 input, but not with 2 inputs (e.g. z = arcsin(x*y)
