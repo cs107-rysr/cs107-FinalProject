@@ -3,11 +3,8 @@ import numpy as np
 import spladtool.spladtool_forward as stf
 
 
-class TestCompare(unittest.TestCase):
-    def near(self, x, y):
-        return np.abs(x - y).sum() < 1e-7
-
-    def test_synthesis(self):
+class TestCompareForward(unittest.TestCase):
+    def test_synthesis_forward(self):
         x = stf.tensor([[1., 2.], [3., 4.]])
         y = [[1, 2], [3, 4]]
         z = np.array([[3, 4], [1, 2]])

@@ -4,11 +4,8 @@ import spladtool.spladtool_reverse as str
 
 
 
-class TestCompare(unittest.TestCase):
-    def near(self, x, y):
-        return np.abs(x - y).sum() < 1e-7
-
-    def test_synthesis(self):
+class TestCompareBackward(unittest.TestCase):
+    def test_synthesis_reverse(self):
         x = str.tensor([[1., 2.], [3., 4.]])
         y = [[1, 2], [3, 4]]
         z = np.array([[3, 4], [1, 2]])

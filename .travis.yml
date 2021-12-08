@@ -18,6 +18,7 @@ install: true
 script:
   - bash test.sh
   - coverage report
+  - coverage xml
 
 after_success:
   - codecov -t "15d2f85f-eb8c-4863-acdd-b5dd3b2b79ac"
