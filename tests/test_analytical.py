@@ -80,6 +80,14 @@ class TestAnalytical(unittest.TestCase):
         j_grad = b_grad * (1 / (1 + b_data**2))
         j = stf.arctan(b)
 
+        k_data = np.log(b_data) / np.log(5)
+        k_grad = b_grad * (1 / (b_data * np.log(5)))
+        k = stf.log_base(b, 5.)
+
+        l_data = 7. ** b_data
+        l_grad = b_data * np.power(7., b_data - 1) * b_grad
+        l = stf.exp_base(b, 7.)
+
         self.assertTrue((b.data == b_data).all())
         self.assertTrue((b.grad == b_grad).all())
         self.assertTrue((c.data == c_data).all())
@@ -98,9 +106,14 @@ class TestAnalytical(unittest.TestCase):
         self.assertTrue((i.grad == i_grad).all())
         self.assertTrue((j.data == j_data).all())
         self.assertTrue((j.grad == j_grad).all())
+        self.assertTrue((k.data == k_data).all())
+        self.assertTrue((k.grad == k_grad).all())
+        self.assertTrue((l.data == l_data).all())
+        self.assertTrue((l.grad == l_grad).all())
 
         self.assertRaises(ValueError, stf.sqrt, stf.tensor([-1]))
         self.assertRaises(ValueError, stf.log, stf.tensor([-1]))
+        self.assertRaises(ValueError, stf.log_base, stf.tensor([-1]), 5.)
         self.assertRaises(ValueError, stf.arcsin, stf.tensor([-5]))
         self.assertRaises(ValueError, stf.arcsin, stf.tensor([5]))
         self.assertRaises(ValueError, stf.arccos, stf.tensor([-5]))

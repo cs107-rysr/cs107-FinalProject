@@ -128,8 +128,14 @@ def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, list],
 def exp(x: Tensor):
     return Exp()(x)
 
+def exp_base(x: Tensor, base: float):
+    return Exp_Base()(x, base)
+
 def log(x: Tensor):
     return Log()(x)
+
+def log_base(x: Tensor, base: float):
+    return Log_Base()(x, base)
 
 def sin(x: Tensor):
     return Sin()(x)
@@ -291,6 +297,17 @@ class Exp(Layer):
         s = Tensor(s_data, s_grad)
         return s
 
+class Exp_Base(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.ExpBase'
+
+    def forward(self, x: Tensor, base: float) -> Tensor:
+        s_data = base ** x.data
+        s_grad = x.data * np.power(base, x.data - 1) * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
 class Sin(Layer):
     def __init__(self):
         super().__init__()
@@ -338,13 +355,26 @@ class Abs(Layer):
 class Log(Layer):
     def __init__(self):
         super().__init__()
-        self.desc = 'spladtool.Layer.Log'
+        self.desc = 'spladtool.Layer.LogBase'
 
     def forward(self, x: Tensor) -> Tensor:
         if (x.data <= 0).any():
             raise ValueError('Cannot take the log of something less than or equal to 0.')
         s_data = np.log(x.data)
         s_grad = 1. / x.data * x.grad
+        s = Tensor(s_data, s_grad)
+        return s
+
+class Log_Base(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.LogBase'
+
+    def forward(self, x: Tensor, base: float) -> Tensor:
+        if (x.data <= 0).any():
+            raise ValueError('Cannot take the log of something less than or equal to 0.')
+        s_data = np.log(x.data) / np.log(base)
+        s_grad = (1. / (x.data * np.log(base))) * x.grad
         s = Tensor(s_data, s_grad)
         return s
 

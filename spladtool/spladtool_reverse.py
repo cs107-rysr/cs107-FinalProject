@@ -153,8 +153,14 @@ def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, list],
 def exp(x: Tensor) -> Tensor:
     return Exp()(x)
 
+def exp_base(x: Tensor, base: float):
+    return Exp_Base(base)(x)
+
 def log(x: Tensor) -> Tensor:
     return Log()(x)
+
+def log_base(x: Tensor, base: float):
+    return Log_Base(base)(x)
 
 def sqrt(x: Tensor) -> Tensor:
     return SquareRoot()(x)
@@ -359,6 +365,24 @@ class Exp(Layer):
         grad = g * np.exp(x.data)
         x.backward(grad)
 
+class Exp_Base(Layer):
+    def __init__(self, base):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.ExpBase'
+        self.base = base
+
+    def forward(self, x):
+        s_data = self.base ** x.data
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        print(self.base - 1)
+        grad = g * x.data * np.power(self.base, x.data - 1)
+        x.backward(grad)
+
 class Log(Layer):
     def __init__(self):
         super().__init__()
@@ -375,6 +399,25 @@ class Log(Layer):
 
     def backward(self, x, g):
         grad = g * (1. / x.data)
+        x.backward(grad)
+
+class Log_Base(Layer):
+    def __init__(self, base):
+        super().__init__()
+        self.name = 'spladtool_reverse.Layer.LogBase'
+        self.base = base
+
+    def forward(self, x):
+        if (x.data <= 0).any():
+            raise ValueError('Cannot take the log of something less than or equal to 0.')
+        s_data = np.log(x.data) / np.log(self.base)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * (1. / (x.data * np.log(self.base)))
         x.backward(grad)
 
 
