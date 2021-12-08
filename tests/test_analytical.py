@@ -1,7 +1,6 @@
 import unittest
-import numpy as np 
-import spladtool_forward as st
-import spladtool_forward.functional as F
+import numpy as np
+from spladtool.spladtool_forward import spladtool_f as sf
 
 
 class TestAnalytical(unittest.TestCase):
@@ -10,27 +9,27 @@ class TestAnalytical(unittest.TestCase):
 
     def test_synthesis(self):
         x_data = np.array([[1., 2.], [3., 4.]])
-        x = st.tensor([[1., 2.], [3., 4.]])
+        x = sf.tensor([[1., 2.], [3., 4.]])
 
         y_data = (np.exp(x_data) + np.exp(-x_data)) / 2
         y_grad = (np.exp(x_data) - np.exp(-x_data)) / 2
-        y = (F.exp(x) + F.exp(-x)) / 2 # this is the famous hyperbolic sin function
+        y = (sf.exp(x) + sf.exp(-x)) / 2 # this is the famous hyperbolic sin function
 
         z_data = np.sin(y_data)
         z_grad = y_grad * np.cos(y_data)
-        z = F.sin(y)
+        z = sf.sin(y)
 
         w_data = np.cos(y_data)
         w_grad = -y_grad * np.sin(y_data)
-        w = F.cos(y)
+        w = sf.cos(y)
 
         u_data = np.tan(y_data)
         u_grad = y_grad * 1 / (np.cos(y_data) ** 2)
-        u = F.tan(y)
+        u = sf.tan(y)
 
         v_data = np.log(y_data)
         v_grad = y_grad * 1 / y_data
-        v = F.log(y)
+        v = sf.log(y)
 
         self.assertTrue((y.data == y_data).all())
         self.assertTrue((z.data == z_data).all())
@@ -44,7 +43,7 @@ class TestAnalytical(unittest.TestCase):
         self.assertTrue((self.near(v.grad, v_grad)).all())
 
         a_data = np.array([0.1, 0.3])
-        a = st.tensor([0.1, 0.3])
+        a = sf.tensor([0.1, 0.3])
 
         b_data = 3 * a_data
         b_grad = 3
@@ -52,35 +51,35 @@ class TestAnalytical(unittest.TestCase):
 
         c_data = np.sinh(b_data)
         c_grad = b_grad * np.cosh(b_data)
-        c = F.sinh(b)
+        c = sf.sinh(b)
 
         d_data = np.cosh(b_data)
         d_grad = b_grad * np.sinh(b_data)
-        d = F.cosh(b)
+        d = sf.cosh(b)
 
         e_data = np.tanh(b_data)
         e_grad = b_grad * (1. / np.cosh(b_data)**2)
-        e = F.tanh(b)
+        e = sf.tanh(b)
 
         f_data = np.exp(b_data) / (np.exp(b_data) + 1)
         f_grad = b_grad * (np.exp(b_data) / (np.exp(b_data) + 1)**2)
-        f = F.logistic(b)
+        f = sf.logistic(b)
 
         g_data = np.sqrt(b_data)
         g_grad = b_grad * (1 / (2 * np.sqrt(b_data)))
-        g = F.sqrt(b)
+        g = sf.sqrt(b)
 
         h_data = np.arcsin(b_data)
         h_grad = b_grad * (1 / (np.sqrt(1 - b_data**2)))
-        h = F.arcsin(b)
+        h = sf.arcsin(b)
 
         i_data = np.arccos(b_data)
         i_grad = b_grad * (-1 / (np.sqrt(1 - b_data**2)))
-        i = F.arccos(b)
+        i = sf.arccos(b)
 
         j_data = np.arctan(b_data)
         j_grad = b_grad * (1 / (1 + b_data**2))
-        j = F.arctan(b)
+        j = sf.arctan(b)
 
         self.assertTrue((b.data == b_data).all())
         self.assertTrue((b.grad == b_grad).all())
@@ -101,12 +100,12 @@ class TestAnalytical(unittest.TestCase):
         self.assertTrue((j.data == j_data).all())
         self.assertTrue((j.grad == j_grad).all())
 
-        self.assertRaises(ValueError, F.sqrt, st.tensor([-1]))
-        self.assertRaises(ValueError, F.log, st.tensor([-1]))
-        self.assertRaises(ValueError, F.arcsin, st.tensor([-5]))
-        self.assertRaises(ValueError, F.arcsin, st.tensor([5]))
-        self.assertRaises(ValueError, F.arccos, st.tensor([-5]))
-        self.assertRaises(ValueError, F.arccos, st.tensor([5]))
+        self.assertRaises(ValueError, sf.sqrt, sf.tensor([-1]))
+        self.assertRaises(ValueError, sf.log, sf.tensor([-1]))
+        self.assertRaises(ValueError, sf.arcsin, sf.tensor([-5]))
+        self.assertRaises(ValueError, sf.arcsin, sf.tensor([5]))
+        self.assertRaises(ValueError, sf.arccos, sf.tensor([-5]))
+        self.assertRaises(ValueError, sf.arccos, sf.tensor([5]))
 
 
 if __name__ == '__main__':

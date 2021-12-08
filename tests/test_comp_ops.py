@@ -1,7 +1,6 @@
 import unittest
 import numpy as np 
-import spladtool_forward as st
-import spladtool_forward.functional as F
+from spladtool.spladtool_forward import spladtool_f as sf
 
 
 class TestCompare(unittest.TestCase):
@@ -9,7 +8,7 @@ class TestCompare(unittest.TestCase):
         return np.abs(x - y).sum() < 1e-7
 
     def test_synthesis(self):
-        x = st.tensor([[1., 2.], [3., 4.]])
+        x = sf.tensor([[1., 2.], [3., 4.]])
         y = [[1, 2], [3, 4]]
         z = np.array([[3, 4], [1, 2]])
         w = 4
