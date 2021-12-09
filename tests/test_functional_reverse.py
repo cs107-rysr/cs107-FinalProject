@@ -77,7 +77,5 @@ class TestBackwardFunctionalOps(unittest.TestCase):
         self.assertTrue((self.near(z.data, tz.detach().numpy())).all())
         self.assertTrue((self.near(x.grad, np.array(tx.grad))).all())
 
-    
-
 if __name__ == '__main__':
     unittest.main()

@@ -9,7 +9,7 @@ class TestBackwardBasicOps(unittest.TestCase):
         return np.abs(x - y).sum() < 1e-5
 
     def test_define_layer(self):
-        class DefinedLayer(str.Layer):
+        class DefinedLayer(str.Module):
             def __init__(self):
                 super().__init__()
                 self.name = 'my_defined_layer'
@@ -17,7 +17,7 @@ class TestBackwardBasicOps(unittest.TestCase):
             def forward(self, x):
                 y = 2 * x + 1
                 w = str.sin(x) + str.cos(x)
-                z = - (y * w )/ (x ** 3) 
+                z = - (y * w ) / (x ** 3) 
                 return z
 
         class TorchLayer(torch.nn.Module):
@@ -27,7 +27,7 @@ class TestBackwardBasicOps(unittest.TestCase):
             def forward(self, x):
                 y = 2 * x + 1
                 w = torch.sin(x) + torch.cos(x)
-                z = - (y * w )/ (x ** 3)
+                z = - (y * w)/ (x ** 3)
                 return z
 
         defined_layer = DefinedLayer()
