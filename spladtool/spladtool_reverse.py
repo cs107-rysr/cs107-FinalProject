@@ -13,11 +13,9 @@ class Tensor():
         if x is None:
             self.data = None
         else:
-            assert type(x) in [np.ndarray, list, int, float]
+            assert type(x) in [np.ndarray, list, int, float, np.float64]
             if type(x) != np.ndarray:
-                x = np.array(x)
-                # added this line here - user can now enter in integers within array
-                x = x.astype(float)
+                x = np.array(x).astype(float)
         self.data = x
         self._grad = np.zeros_like(self.data)
         self.dependency = None
@@ -25,7 +23,6 @@ class Tensor():
         self._shape = x.shape
 
     def backward(self, g=None):
-        # print('output: ', self, 'input: ', self.dependency, 'layer: ', self.layer, 'grad: ', g)
         if g is None:
             g = np.ones_like(self.data)
         assert g.shape == self.data.shape
@@ -90,6 +87,15 @@ class Tensor():
     def __ge__(self, y):
         return greater_equal(self, y)
 
+    def mean(self):
+        return mean(self)
+
+    def sum(self):
+        return sum(self)
+
+    def repeat(self, times):
+        return repeat(self, times)
+
     @property
     def shape(self):
         return self._shape
@@ -97,6 +103,7 @@ class Tensor():
     @property
     def grad(self):
         return self._grad
+
 # TENSOR SCRIPT ========================================
 
 
@@ -210,6 +217,21 @@ def less_equal(x: Tensor, y) -> Tensor:
 def greater_equal(x: Tensor, y) -> Tensor:
     return GreaterEqual()(x,y)
 
+def sum(x: Tensor) -> Tensor:
+    return Sum()(x)
+
+def mean(x: Tensor) -> Tensor:
+    return sum(x) / np.prod(x.data.shape)
+
+def logistic(x: Tensor) -> Tensor:
+    return 1 / (1 + exp(-x))
+
+def log_prob(x: Tensor) -> Tensor:
+    return log(logistic(x))
+
+def repeat(x: Tensor, times: int) -> Tensor:
+    return Repeat()(x, times)
+
 # FUNCTIONAL SCRIPT ====================================
 
 
@@ -217,7 +239,7 @@ def greater_equal(x: Tensor, y) -> Tensor:
 class Layer():
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer'
+        self.desc = 'spladtool_reverse.Layer'
 
     def forward(self, *args):
         raise NotImplementedError
@@ -226,10 +248,10 @@ class Layer():
         raise NotImplementedError
 
     def __repr__(self) -> str:
-        return self.name
+        return self.desc
 
     def __str__(self) -> str:
-        return self.name
+        return self.desc
 
     def __call__(self, *args):
         return self.forward(*args)
@@ -349,10 +371,11 @@ class NumSum(Layer):
     def backward(self, x, g):
         x.backward(g)
 
+
 class Exp(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.Exp'
+        self.desc = 'spladtool_reverse.Layer.Exp'
 
     def forward(self, x):
         s_data = np.exp(x.data)
@@ -365,10 +388,11 @@ class Exp(Layer):
         grad = g * np.exp(x.data)
         x.backward(grad)
 
+
 class Exp_Base(Layer):
     def __init__(self, base):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.ExpBase'
+        self.desc = 'spladtool_reverse.Layer.ExpBase'
         self.base = base
 
     def forward(self, x):
@@ -379,14 +403,14 @@ class Exp_Base(Layer):
         return s
 
     def backward(self, x, g):
-        print(self.base - 1)
         grad = g * x.data * np.power(self.base, x.data - 1)
         x.backward(grad)
+
 
 class Log(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.Log'
+        self.desc = 'spladtool_reverse.Layer.Log'
 
     def forward(self, x):
         if (x.data <= 0).any():
@@ -401,10 +425,11 @@ class Log(Layer):
         grad = g * (1. / x.data)
         x.backward(grad)
 
+
 class Log_Base(Layer):
     def __init__(self, base):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.LogBase'
+        self.desc = 'spladtool_reverse.Layer.LogBase'
         self.base = base
 
     def forward(self, x):
@@ -424,7 +449,7 @@ class Log_Base(Layer):
 class SquareRoot(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.SquareRoot'
+        self.desc = 'spladtool_reverse.Layer.SquareRoot'
 
     def forward(self, x):
         if (x.data <= 0).any():
@@ -442,7 +467,7 @@ class SquareRoot(Layer):
 class Sin(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.Sin'
+        self.desc = 'spladtool_reverse.Layer.Sin'
 
     def forward(self, x):
         s_data = np.sin(x.data)
@@ -458,7 +483,7 @@ class Sin(Layer):
 class Cos(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.Cos'
+        self.desc = 'spladtool_reverse.Layer.Cos'
 
     def forward(self, x):
         s_data = np.cos(x.data)
@@ -474,7 +499,7 @@ class Cos(Layer):
 class Tan(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.Tan'
+        self.desc = 'spladtool_reverse.Layer.Tan'
 
     def forward(self, x):
         s_data = np.tan(x.data)
@@ -493,7 +518,7 @@ class Tan(Layer):
 class ArcSin(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.ArcSin'
+        self.desc = 'spladtool_reverse.Layer.ArcSin'
 
     def forward(self, x):
         if (x.data < -1).any() or (x.data > 1).any():
@@ -511,7 +536,7 @@ class ArcSin(Layer):
 class ArcCos(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.ArcCos'
+        self.desc = 'spladtool_reverse.Layer.ArcCos'
 
     def forward(self, x):
         if (x.data < -1).any() or (x.data > 1).any():
@@ -529,7 +554,7 @@ class ArcCos(Layer):
 class ArcTan(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.ArcTan'
+        self.desc = 'spladtool_reverse.Layer.ArcTan'
 
     def forward(self, x):
         s_data = np.arctan(x.data)
@@ -545,7 +570,7 @@ class ArcTan(Layer):
 class Sinh(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.Sinh'
+        self.desc = 'spladtool_reverse.Layer.Sinh'
 
     def forward(self, x):
         s_data = np.sinh(x.data)
@@ -561,7 +586,7 @@ class Sinh(Layer):
 class Cosh(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.Cosh'
+        self.desc = 'spladtool_reverse.Layer.Cosh'
 
     def forward(self, x):
         s_data = np.cosh(x.data)
@@ -574,10 +599,11 @@ class Cosh(Layer):
         grad = g * np.sinh(x.data)
         x.backward(grad)
 
+
 class Tanh(Layer):
     def __init__(self):
         super().__init__()
-        self.name = 'spladtool_reverse.Layer.Cosh'
+        self.desc = 'spladtool_reverse.Layer.Cosh'
 
     def forward(self, x):
         s_data = np.tanh(x.data)
@@ -590,6 +616,7 @@ class Tanh(Layer):
         grad = g * (1 - (np.tanh(x.data)**2))
         x.backward(grad)
         
+
 class Comparator(Layer):
     def __init__(self, cmp):
         super().__init__()
@@ -599,7 +626,6 @@ class Comparator(Layer):
     def forward(self, x: Tensor, y: Union[float, int, np.ndarray, list, Tensor]) -> Tensor:
         if type(y) == int or type(y) == float:
             s_data = (self.cmp(x.data, y))
-            s_grad = np.nan
             return Tensor(s_data)
         elif type(y) == list:
             y = np.array(y)
@@ -610,8 +636,11 @@ class Comparator(Layer):
                 s_data = (self.cmp(x.data, y))
             else:
                 s_data = (self.cmp(x.data, y.data))
-            s_grad = np.nan
             return Tensor(s_data)
+
+    def backward(self, x, y, g):
+        x.backward(np.nan)
+        y.backward(np.nan)
 
 
 class Equal(Comparator):
@@ -652,4 +681,87 @@ class GreaterEqual(Comparator):
 def tensor(x):
     return Tensor(x)
 
+
+class Sum(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool_reverse.Layer.Sum'
+
+    def forward(self, x):
+        s_data = np.sum(x.data)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        grad = g * np.ones_like(x.data)
+        x.backward(grad)
+
+
+class Repeat(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool_reverse.Layer.Repeat'
+
+    def forward(self, x: Tensor, times: int):
+        assert len(x.shape) == 0
+        s_data = np.repeat(x.data, times)
+        s = Tensor(s_data)
+        s.dependency = [x]
+        s.layer = self
+        return s
+
+    def backward(self, x, g):
+        x_grad = g.sum()
+        x.backward(x_grad)
+
 # LAYER SCRIPT ====================================
+
+
+
+# EXAMPLE LAYERS==================================
+
+class Module(Layer):
+    '''
+    Module inherits from a layer and does not requires a backward function
+    However you can override it if you want.
+    The Module class provides an interface to create your own models with trainable parameters
+    You can register it in the init function and pass them to the optimizers by parameters() method
+    '''
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool_reverse.Module'
+        self.params = {}
+
+    def register_param(self, **kwargs):
+        for k, v in kwargs.items():
+            self.params[k] = v
+    
+    def parameters(self):
+        return self.params
+    
+
+class MSELoss(Module):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool_reverse.Layer.MSE'
+
+    def forward(self, y_true, y_pred):
+        diff = y_true - y_pred
+        diff_squared = diff ** 2
+        mse = diff_squared.mean()  
+        return mse
+        
+
+class BCELoss(Module):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool_reverse.Layer.CE'
+
+    def forward(self, y_true, y_pred):
+        log_positive_prob = log_prob(y_pred)
+        log_negative_prob = log_prob(1 - y_pred)
+        nll = y_true * log_positive_prob + (1 - y_true) * log_negative_prob
+        nll = -nll.mean()
+        return nll
