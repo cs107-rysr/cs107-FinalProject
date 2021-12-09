@@ -4,7 +4,7 @@ import spladtool.spladtool_reverse as str
 from spladtool.utils import SGD
 
 
-class TestBackwardBasicOps(unittest.TestCase):
+class TestOptimize(unittest.TestCase):
     def near(self, x, y):
         return np.abs(x - y).sum() < 1e-5
 
