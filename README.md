@@ -118,20 +118,23 @@ We adopt `unittest` as our testing framework. The up-to-now dev-only test script
 cs107-FinalProject/
 ├── README.md
 ├── LICENSE
+├── Dockerfile
 ├── requirements.txt
 ├── .travis.yml
+├── .coverage
 ├── docs
 │   ├── documentation
 │   └── ...
 ├── spladtool
 │   ├── __init__.py
-│   ├── functional.py
-│   ├── layer.py
-│   └── tensor.py
+│   ├── spladtool_forward.py
+│   ├── spladtool_reverse.py
+│   └── utils.py
 ├── tests
-│   ├── tests_basic.py
-│   ├── tests_comp.py
-│   └── tests_elem.py
+│   ├── test_analytical.py
+│   ├── test_backwards_func.py
+│   ├── test_basic_ops.py
+│   └── ...
 ├── test.py
 └── test.sh
 ```
