@@ -1,22 +1,3 @@
-<!-- # cs107-FinalProject
-
-# SPLADTool: **S**imple **P**yTorch-**L**ike **A**utomatic **D**ifferentiation Tools
-
-[![Build Status](https://app.travis-ci.com/cs107-rysr/cs107-FinalProject.svg?token=e6J2xSxxbBcpWz7pkoA3&branch=main)](https://app.travis-ci.com/cs107-rysr/cs107-FinalProject)
-[![codecov](https://codecov.io/gh/cs107-rysr/cs107-FinalProject/branch/main/graph/badge.svg?token=49FWUPH6X1)](https://codecov.io/gh/cs107-rysr/cs107-FinalProject) -->
-
-<!-- Fall 2021 CS107 Final Project Automatic Differentiation
-
-# Info
-Group Number: #31
-Group Members:
-Shihan Lin
-Yuanbiao Wang
-Raymond Jow
-Rye Julson -->
-
-<!-- # Documentation for SPLADTool -->
-
 ## Introduction
 
 With the rapid development of deep learning, auto differentiation has become an indispensable part of multiple optimization algorithms like gradient descent. Numerical means such as Newton's Method and finite-difference method is useful in some situations, we desire to compute the analytical solutions by applying chain rules with our automatic differentiation SPLADTool (**S**imple **P**ytorch-**L**ike **A**uto **D**ifferentiation **Tool**kit), which will be faster and more accurate than numerical methods.

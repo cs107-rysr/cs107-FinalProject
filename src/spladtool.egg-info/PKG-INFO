@@ -1,38 +1,18 @@
 Metadata-Version: 2.1
 Name: spladtool
-Version: 0.0.9
+Version: 0.1.1
 Summary: The Simple Pytorch-Like Auto Differentiation Toolkit is an automatic differentiation package for calculating gradients of a function in forward and reverse mode.
 Home-page: https://github.com/cs107-rysr/cs107-FinalProject
-Author: 'Raymond Jow, Shihan Lin, Yuanbiao Wang, Rye Julson'
+Author: 'Raymond Jow, Rye Julson, Shihan Lin, Yuanbiao Wang'
 Author-email: rjow@college.harvard.edu
 License: UNKNOWN
-Project-URL: Bug Tracker, https://github.com/cs107-rysr/cs107-FinalProject/issues
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
-Requires-Python: >=3.7
+Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
-
-<!-- # cs107-FinalProject
-
-# SPLADTool: **S**imple **P**yTorch-**L**ike **A**utomatic **D**ifferentiation Tools
-
-[![Build Status](https://app.travis-ci.com/cs107-rysr/cs107-FinalProject.svg?token=e6J2xSxxbBcpWz7pkoA3&branch=main)](https://app.travis-ci.com/cs107-rysr/cs107-FinalProject)
-[![codecov](https://codecov.io/gh/cs107-rysr/cs107-FinalProject/branch/main/graph/badge.svg?token=49FWUPH6X1)](https://codecov.io/gh/cs107-rysr/cs107-FinalProject) -->
-
-<!-- Fall 2021 CS107 Final Project Automatic Differentiation
-
-# Info
-Group Number: #31
-Group Members:
-Shihan Lin
-Yuanbiao Wang
-Raymond Jow
-Rye Julson -->
-
-<!-- # Documentation for SPLADTool -->
 
 ## Introduction
 
@@ -45,7 +25,7 @@ With the rapid development of deep learning, auto differentiation has become an 
     conda create --name spladtool_env python
     ```
     
-   Activate the environment;
+   Activate the environment:
    ```bash
    conda activate spladtool_env
    ```
