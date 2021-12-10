@@ -4,15 +4,6 @@ import spladtool.spladtool_forward as stf
 
 
 class TestBasic(unittest.TestCase):
-    
-    def test_seed(self):
-        seed = [[1.], [0], [0]]
-        sf_x = stf.tensor([[1.0], [2.0], [3.0]], seed=seed)
-        sf_z = sf_x + 4
-        print('x : ', sf_x)
-        print('z : ', sf_z)
-        print('z.grad: ', sf_z.grad)
-        self.assertTrue((sf_z.grad == np.array([[1.],[0],[0]])).all())
         
     def test_add(self):
         x = np.array([[1.0], [2.0], [3.0]])
@@ -102,6 +93,15 @@ class TestBasic(unittest.TestCase):
     def test_repr(self):
         x = stf.tensor([[1., 2.], [3., 4.]])
         self.assertTrue(repr(x) == 'spladtool.Tensor(\n[[1. 2.]\n [3. 4.]]\n)')
+        
+    def test_seed(self):
+        seed = [1.0, 0, 0]
+        sf_x = stf.Tensor([1.0, 2.0, 3.0], seed=seed)
+        sf_z = sf_x + 4
+        print('x : ', sf_x)
+        print('z : ', sf_z)
+        print('z.grad: ', sf_z.grad)
+        self.assertTrue(sf_z.grad == 1.0)
 
  
 if __name__ == '__main__':

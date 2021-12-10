@@ -48,9 +48,9 @@ class Tensor():
         self._shape = x.shape
         if grad is None:
             grad = np.ones_like(self.data)
-        if seed is None:
-            seed = np.ones_like((x.shape[0],))
-        self.grad = grad * seed
+        self.grad = grad
+        if seed is not None:
+            self.grad = np.dot(grad, seed)
 
     
     def __repr__(self):
