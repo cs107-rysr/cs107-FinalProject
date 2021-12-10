@@ -539,7 +539,7 @@ def arctan(x: Tensor):
     >>> x = tensor([[0.1, 0.2], [0.3, 0.4]])
     >>> z = arctan(x)
     >>> print(z)
-    sinh: spladtool.Tensor([[0.10016742, 0.20135792], [0.30469265 0.41151685]])
+    spladtool.Tensor([[0.10016742, 0.20135792], [0.30469265 0.41151685]])
     '''
     return ArcTan()(x)
 
