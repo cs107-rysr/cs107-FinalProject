@@ -11,13 +11,10 @@ class Tensor():
         ----------
         x : np.ndarray, list, int, float or np.float_, optional, default is None
             values of the variable at which to compute the derivative
-
         grad : np.ndarray, list, int, float or np.float_, optional, default is None
                gradient with respect to the variable
-
         seed : np.ndarray, list, int, float or np.float_, optional, default is None
                seed vector is used to perform directional derivative
-
         Returns
         -------
         A Tensor object with the corresponding value, gradient, and seed
@@ -48,9 +45,9 @@ class Tensor():
         self._shape = x.shape
         if grad is None:
             grad = np.ones_like(self.data)
-        if seed is None:
-            seed = np.ones_like((x.shape[0],))
-        self.grad = grad * seed
+        self.grad = grad
+        if seed is not None:
+            self.grad = np.dot(grad, seed)
 
     
     def __repr__(self):
@@ -430,15 +427,72 @@ def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, list],
         return sumup(x, -y)
 
 def exp(x: Tensor):
+    '''
+    Compute the exponential of a Tensor object
+    
+    Parameters
+    ----------
+    x : Tensor
+    
+    Examples
+    -------
+    >>> x = tensor([[1., 2.], [3., 4.]])
+    >>> z = exp(x)
+    >>> print(z)
+    spladtool([[ 2.71828183, 7.3890561 ], [20.08553692, 54.59815003]])
+    '''
     return Exp()(x)
 
 def exp_base(x: Tensor, base: float):
+    '''
+    Compute the exponential of a Tensor object with an arbitrary base value
+    
+    Parameters
+    ----------
+    x : Tensor
+    
+    Examples
+    -------
+    >>> x = tensor([[1., 2.], [3., 4.]])
+    >>> base = 10
+    >>> z = exp_base(x, base)
+    >>> print(z)
+    spladtool.Tensor([[10., 100.], [1000. 10000.]])
+    '''
     return Exp_Base()(x, base)
 
 def log(x: Tensor):
+    '''
+    Compute the logarithm of a Tensor object with
+    
+    Parameters
+    ----------
+    x : Tensor
+    
+    Examples
+    -------
+    >>> x = tensor([[1., 2.], [3., 4.]])
+    >>> z = log(x)
+    >>> print(z)
+    spladtool.Tensor([[0., 0.69314718], [1.09861229, 1.38629436]])    
+    '''
     return Log()(x)
 
 def log_base(x: Tensor, base: float):
+    '''
+    Compute the logarithm of a Tensor object with an arbitrary base value
+    
+    Parameters
+    ----------
+    x : Tensor
+    
+    Examples
+    -------
+    >>> x = tensor([[1., 2.], [3., 4.]])
+    >>> z = log_base(x, 10)
+    >>> print(z)
+    spladtool.Tensor([[0., 0.30103], [0.47712125, 0.60205999]])
+    '''
     return Log_Base()(x, base)
 
 def sin(x: Tensor):
@@ -539,7 +593,7 @@ def arctan(x: Tensor):
     >>> x = tensor([[0.1, 0.2], [0.3, 0.4]])
     >>> z = arctan(x)
     >>> print(z)
-    sinh: spladtool.Tensor([[0.10016742, 0.20135792], [0.30469265 0.41151685]])
+    spladtool.Tensor([[0.10016742, 0.20135792], [0.30469265 0.41151685]])
     '''
     return ArcTan()(x)
 
@@ -673,7 +727,7 @@ class Layer():
     '''
     Base class for all following functional classes to inherit from
     
-    Note: when a functional class is called by a function, it will return its forward method with the corresponding arguments 
+    Note: when a functional class is called by a function, it will return its automatically call method with the corresponding arguments 
     '''
     def __init__(self):
         super().__init__()
@@ -703,7 +757,7 @@ class Power(Layer):
         Parameters
         ----------
         x : Tensor
-        y : float
+        p : float
     
         Returns
         -------
@@ -723,12 +777,10 @@ class TensorSum(Layer):
     def forward(self, x: Tensor, y: Tensor) -> Tensor:
         '''
         Perform the operation of adding two Tensor objects
-
         Parameters
         ----------
         x : Tensor
         y : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after addition
@@ -753,7 +805,6 @@ class TensorProd(Layer):
         ----------
         x : Tensor
         y : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after multiplication
@@ -777,7 +828,6 @@ class TensorInv(Layer):
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking its inverse
@@ -795,16 +845,13 @@ class NumProd(Layer):
     def forward(self, x: Tensor, y: Union[int, float, list, np.ndarray]) -> Tensor:
         '''
         Perform the operation of multiplying a Tensor object by number(s)
-
         Parameters
         ----------
         x : Tensor
         y : int, float, list, or np.ndarray
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after mutiplication with number(s)
-
         '''
         if type(y) == list:
             y = np.array(y)
@@ -821,16 +868,13 @@ class NumSum(Layer):
     def forward(self, x: Tensor, y: Union[int, float, List[float], List[int], np.ndarray]) -> Tensor:
         '''
         Perform the operation of adding number(s) to a Tensor object 
-
         Parameters
         ----------
         x : Tensor
         y : int, float, list, or np.ndarray
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after adding number(s) to it
-
         '''
         if type(y) == list:
             y = np.array(y)
@@ -847,15 +891,12 @@ class Exp(Layer):
     def forward(self, x: Tensor) -> Tensor:
         '''
         Perform the operation of computing the exponential of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after computing the exponential
-
         '''
         s_data = np.exp(x.data)
         s_grad = np.exp(x.data) * x.grad
@@ -870,16 +911,13 @@ class Exp_Base(Layer):
     def forward(self, x: Tensor, base: float) -> Tensor:
         '''
         Perform the operation of computing the exponential with an arbitrary base of a Tensor object
-
         Parameters
         ----------
         x : Tensor
         base : float
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the exponential with an arbitrary base value
-
         '''
         s_data = base ** x.data
         s_grad = x.data * np.power(base, x.data - 1) * x.grad
@@ -894,11 +932,9 @@ class Sin(Layer):
     def forward(self, x: Tensor) -> Tensor:
         '''
         Compute the sine of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the sine
@@ -916,11 +952,9 @@ class Cos(Layer):
     def forward(self, x: Tensor) -> Tensor:
         '''
         Compute the cosine of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the cosine
@@ -938,11 +972,9 @@ class Tan(Layer):
     def forward(self, x: Tensor) -> Tensor:
         '''
         Compute the tangent of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the tangent
@@ -960,11 +992,9 @@ class Abs(Layer):
     def forward(self, x: Tensor) -> Tensor:
         '''
         Compute the absolute value of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the absolute value
@@ -982,11 +1012,9 @@ class Log(Layer):
     def forward(self, x: Tensor) -> Tensor:
         '''
         Compute the natural logarithm of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the natural log
@@ -1010,12 +1038,10 @@ class Log_Base(Layer):
     def forward(self, x: Tensor, base: float) -> Tensor:
         '''
         Compute the logarithm with an arbitrary base value of a Tensor object
-
         Parameters
         ----------
         x : Tensor
         base : float
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the log with an arbitrary base
@@ -1039,11 +1065,9 @@ class ArcSin(Layer):
     def forward(self, x: Tensor):
         '''
         Compute the arcsine of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the arcsine
@@ -1067,11 +1091,9 @@ class ArcCos(Layer):
     def forward(self, x: Tensor):
         '''
         Compute the arccosine of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the arccosine
@@ -1095,11 +1117,9 @@ class ArcTan(Layer):
     def forward(self, x: Tensor):
         '''
         Compute the arctangent of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the arctangent
@@ -1117,11 +1137,9 @@ class Sinh(Layer):
     def forward(self, x: Tensor):
         '''
         Compute the hyperbolic sine of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the hyperbolic sine
@@ -1139,11 +1157,9 @@ class Cosh(Layer):
     def forward(self, x: Tensor):
         '''
         Compute the hyperbolic cosine of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the hyperbolic cosine
@@ -1161,11 +1177,9 @@ class Tanh(Layer):
     def forward(self, x: Tensor):
         '''
         Compute the hyperbolic tangent of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the hyperbolic tangent
@@ -1183,11 +1197,9 @@ class Logistic(Layer):
     def forward(self, x: Tensor):
         '''
         Apply the logistic function to a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after the logistic function
@@ -1205,11 +1217,9 @@ class SquareRoot(Layer):
     def forward(self, x: Tensor):
         '''
         Compute the square root of a Tensor object
-
         Parameters
         ----------
         x : Tensor
-
         Returns
         -------
         A new Tensor object with updated values and corresponding gradients after taking the square root
@@ -1229,7 +1239,6 @@ class Comparator(Layer):
     def __init__(self, cmp):
         '''
         Initiate a generic comparator object used for the specific comparison operator cmp
-
         Parameters
         ----------
         cmp : np.equal, np.not_equal, np.less, np.greater, np.less_equal, or np.greater_equal
@@ -1242,12 +1251,10 @@ class Comparator(Layer):
     def forward(self, x: Tensor, y: Union[float, int, np.ndarray, list, Tensor]) -> Tensor:
         '''
         Compare every element in the data of two variable correspondingly using the comparison operator self.cmp
-
         Parameters
         ----------
         x : Tensor
         y : float, int, np.ndarray, list, or Tensor
-
         Returns
         -------
         A new Tensor object with the same shape as the input and contains boolean values produced by element-wise comparisons
@@ -1255,7 +1262,6 @@ class Comparator(Layer):
         Raises
         ------
         TypeError: if the shapes of two parameters do not match, then they cannot be compare, so raise a TypeError
-
         '''
         if type(y) == int or type(y) == float:
             s_data = (self.cmp(x.data, y))

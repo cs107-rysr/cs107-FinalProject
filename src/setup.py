@@ -10,13 +10,16 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name = "spladtool",
-    version = "0.0.3",
+    version = "0.0.5",
     author = "Raymond Jow, Rye Julson, Shihan Lin, Yuanbiao Wang",
     author_email = "rjow@college.harvard.edu",
     description = "The Simple Pytorch-Like Auto Differentiation Toolkit is an automatic differentiation package for calculating gradients of a function in forward and reverse mode.",
     long_description = README,
     long_description_content_type = "text/markdown",
     url = "https://github.com/cs107-rysr/cs107-FinalProject",
+    project_urls = {
+        "Documentation": "https://spladtool-docs.readthedocs.io/en/latest/index.html",
+    },
     license = "MIT",
     classifiers = [
         "Programming Language :: Python :: 3",
