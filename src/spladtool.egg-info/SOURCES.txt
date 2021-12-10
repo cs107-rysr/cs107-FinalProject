@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+src/spladtool/__init__.py
+src/spladtool/spladtool_forward.py
+src/spladtool/spladtool_reverse.py
+src/spladtool/utils.py
+src/spladtool.egg-info/PKG-INFO
+src/spladtool.egg-info/SOURCES.txt
+src/spladtool.egg-info/dependency_links.txt
+src/spladtool.egg-info/top_level.txt
