@@ -760,7 +760,7 @@ class Power(Layer):
         Parameters
         ----------
         x : Tensor
-        y : float
+        p : float
     
         Returns
         -------
