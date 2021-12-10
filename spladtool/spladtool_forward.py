@@ -48,9 +48,9 @@ class Tensor():
         self._shape = x.shape
         if grad is None:
             grad = np.ones_like(self.data)
-        if seed is None:
-            seed = np.ones_like((x.shape[0],))
-        self.grad = grad * seed
+        self.grad = grad
+        if seed is not None:
+            self.grad = np.dot(grad, seed)
 
     
     def __repr__(self):
@@ -430,15 +430,72 @@ def minus(x: Union[Tensor, int, float, Tensor, np.ndarray, list],
         return sumup(x, -y)
 
 def exp(x: Tensor):
+    '''
+    Compute the exponential of a Tensor object
+    
+    Parameters
+    ----------
+    x : Tensor
+    
+    Examples
+    -------
+    >>> x = tensor([[1., 2.], [3., 4.]])
+    >>> z = exp(x)
+    >>> print(z)
+    spladtool([[ 2.71828183, 7.3890561 ], [20.08553692, 54.59815003]])
+    '''
     return Exp()(x)
 
 def exp_base(x: Tensor, base: float):
+    '''
+    Compute the exponential of a Tensor object with an arbitrary base value
+    
+    Parameters
+    ----------
+    x : Tensor
+    
+    Examples
+    -------
+    >>> x = tensor([[1., 2.], [3., 4.]])
+    >>> base = 10
+    >>> z = exp_base(x, base)
+    >>> print(z)
+    spladtool.Tensor([[10., 100.], [1000. 10000.]])
+    '''
     return Exp_Base()(x, base)
 
 def log(x: Tensor):
+    '''
+    Compute the logarithm of a Tensor object with
+    
+    Parameters
+    ----------
+    x : Tensor
+    
+    Examples
+    -------
+    >>> x = tensor([[1., 2.], [3., 4.]])
+    >>> z = log(x)
+    >>> print(z)
+    spladtool.Tensor([[0., 0.69314718], [1.09861229, 1.38629436]])    
+    '''
     return Log()(x)
 
 def log_base(x: Tensor, base: float):
+    '''
+    Compute the logarithm of a Tensor object with an arbitrary base value
+    
+    Parameters
+    ----------
+    x : Tensor
+    
+    Examples
+    -------
+    >>> x = tensor([[1., 2.], [3., 4.]])
+    >>> z = log_base(x, 10)
+    >>> print(z)
+    spladtool.Tensor([[0., 0.30103], [0.47712125, 0.60205999]])
+    '''
     return Log_Base()(x, base)
 
 def sin(x: Tensor):
@@ -539,7 +596,7 @@ def arctan(x: Tensor):
     >>> x = tensor([[0.1, 0.2], [0.3, 0.4]])
     >>> z = arctan(x)
     >>> print(z)
-    sinh: spladtool.Tensor([[0.10016742, 0.20135792], [0.30469265 0.41151685]])
+    spladtool.Tensor([[0.10016742, 0.20135792], [0.30469265 0.41151685]])
     '''
     return ArcTan()(x)
 
@@ -673,7 +730,7 @@ class Layer():
     '''
     Base class for all following functional classes to inherit from
     
-    Note: when a functional class is called by a function, it will return its forward method with the corresponding arguments 
+    Note: when a functional class is called by a function, it will return its automatically call method with the corresponding arguments 
     '''
     def __init__(self):
         super().__init__()
@@ -703,7 +760,7 @@ class Power(Layer):
         Parameters
         ----------
         x : Tensor
-        y : float
+        p : float
     
         Returns
         -------
@@ -1302,3 +1359,4 @@ class GreaterEqual(Comparator):
     def __init__(self):
         super().__init__(np.greater_equal)
         self.desc = 'spladtool.Layer.GreaterEqual'
+
