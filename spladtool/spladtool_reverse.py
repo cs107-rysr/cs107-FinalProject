@@ -1579,6 +1579,3 @@ class BCELoss(Module):
         nll = -nll.mean()
         return nll
     
-x = tensor([[1., 2.], [3., 4.]])
-print(exp(x))
-print(log(x))
