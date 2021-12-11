@@ -37,7 +37,7 @@ Rye Julson
     pip install spladtool
     ```
 
-3. Try out a forward mode example:
+3. Try out a simple forward mode example:
 
    ```bash
    >>>> import spladtool.spladtool_forward as sf
@@ -55,7 +55,7 @@ Rye Julson
          [ 4.17169950e-02,  8.86701846e-03]])
    ```
 
-
+   Here is a simple reverse mode example:
    ```bash
    >>>> import spladtool.spladtool_reverse as sr
    >>>> x = sr.tensor([[1, 2], [3, 4]])
