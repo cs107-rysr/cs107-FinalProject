@@ -34,48 +34,45 @@ Rye Julson
 
 2. Download the package to local:
     ```bash
-    git clone https://github.com/cs107-rysr/cs107-FinalProject.git
-    ```
-    Install our dependencies by `requirement.txt` with anaconda or python
-    ```bash
-    conda install --yes --file requirements.txt
-    # or
-    pip install -r requirements.txt
+    pip install spladtool
     ```
 
-3. Try out an example from `test.py` on arithmetic functions:
+3. Try out a forward mode example:
 
-   ```python
-   import spladtool_forward as st
-   import splatool_forward.functional as F
-
-   x = st.tensor([[1., 2.], [3., 4.]])
-           
-   # Define output functions y(x) and z(x)
-   y = 2 * x + 1
-   z = - y / (x ** 3)
-   w = F.cos((F.exp(z) + F.exp(-z)) / 2)
-   
-   # Print out the values calculated by our forward mode automatic differentiation SPLADTool
-   print('x : ', x)
-   print('y : ', y)
-   print('y.grad : ', y.grad)
-   print('z: ', z)
-   print('z.grad: ', z.grad)
-   print('w: ', w)
-   print('w.grad: ', w.grad)
+   ```bash
+   >>>> import spladtool.spladtool_forward as sf
+   >>>> x = sf.tensor([[1., 2.], [3., 4.]])
+   >>>> y = 2 * x + 1
+   >>>> z = -y / (x ** 3)
+   >>>> w = sf.cos((sf.exp(z) + sf.exp(-z)) / 2)
+   >>>> w
+   spladtool.Tensor(
+   [[-0.80037009  0.36072269]
+   [ 0.51156054  0.53194201]]
+   )
+   >>>> w.grad # should be the derivatives of w w.r.t x
+   array([[-4.20404488e+01,  4.27363350e-01],
+         [ 4.17169950e-02,  8.86701846e-03]])
    ```
 
-4. To run given tests, under UNIX environment, use
-```
-sh test.sh
-```
 
-Under Windows environment, run
-```
-coverage run test.py
-coverage report
-```
+   ```bash
+   >>>> import spladtool.spladtool_reverse as sr
+   >>>> x = sr.tensor([[1, 2], [3, 4]])
+   >>>> y = sr.cos(3 * (x ** 2) + 4 * x + 1)
+   >>>> z = y.mean()
+   >>>> z
+   spladtool_reverse.Tensor(-0.48065530173082893)
+   >>>> z.backward()
+   >>>> z.grad
+   array(1.)
+   >>>> y.grad
+   array([[0.25, 0.25],
+         [0.25, 0.25]])
+   >>>> x.grad
+   array([[-2.47339562, -3.34662255],
+         [-4.09812238, -5.78780076]])
+   ```
 
 ## Implementation
 
@@ -109,7 +106,7 @@ To make sure the type is  correct, we add python typing to each of the operation
 
 ### Testing, CI & Coverage Report
 
-We adopt `unittest` as our testing framework. The up-to-now dev-only test script can be found in `./test.py`. As of continuous integration(CI), we are using Travis CI. For coverage report, we use the `coverage` package and upload the result to CodeCov. Find the results of our CI & coverage report by clicking on the badge in `README.md`
+We adopt `unittest` as our testing framework. The up-to-now dev-only test script can be found in `./test.py`. As for continuous integration(CI), we are using Travis CI. Travis CI runs a `./test.sh` bash file which runs coverage run test.py.  All our tests are located in the `/tests` folder, and for the reverse mode AD tests, we use pytorch to check our gradients.  For coverage report, we use the `coverage` package and upload the result to CodeCov. Find the results of our CI & coverage report by clicking on the badge in `README.md`
 
 
 ## Software Organization
