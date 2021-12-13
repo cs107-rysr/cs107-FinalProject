@@ -15,6 +15,9 @@ Yuanbiao Wang
 Raymond Jow
 Rye Julson
 
+# Online Document
+https://spladtool-docs.readthedocs.io/en/latest/
+
 ## Usage
 
 1. Create a virtual environment: Conda
