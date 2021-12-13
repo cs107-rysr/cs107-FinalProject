@@ -7,7 +7,7 @@
 
 Fall 2021 CS107 Final Project Automatic Differentiation
 
-# Info
+## Info
 Group Number: #31
 Group Members:
 Shihan Lin
@@ -15,8 +15,11 @@ Yuanbiao Wang
 Raymond Jow
 Rye Julson
 
-# Online Document
+## Online Document
 https://spladtool-docs.readthedocs.io/en/latest/
+
+## Sample Notebook
+https://colab.research.google.com/drive/1F0S0mOhdc_HvZd_vc4NfZzva6H7lYLRj?usp=sharing
 
 ## Usage
 
