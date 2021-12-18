@@ -16,7 +16,7 @@ class Tensor():
         if grad is None:
             grad = np.ones_like(self.data)
         if seed is None:
-            seed = np.ones_like((x.shape[0],))
+            seed = np.ones_like(self.data)
         self.grad = grad * seed
 
     def __repr__(self):
@@ -75,6 +75,9 @@ class Tensor():
 
     def __ge__(self, y):
         return greater_equal(self, y)
+
+    def __getitem__(self, index):
+        return slice(self, index)
 
     @property
     def shape(self):
@@ -191,8 +194,12 @@ def less_equal(x: Tensor, y):
 def greater_equal(x: Tensor, y):
     return GreaterEqual()(x, y)
 
-def tensor(x, seed=None):
-    return Tensor(x, seed)
+def slice(x: Tensor, index: int):
+    assert index < x.shape[0], "index overflow"
+    return Slice()(x, index)
+
+def tensor(x, grad=None, seed=None):
+    return Tensor(x, grad, seed)
 # FUNCTIONAL SCRIPT ====================================
 
 
@@ -524,6 +531,19 @@ class GreaterEqual(Comparator):
     def __init__(self):
         super().__init__(np.greater_equal)
         self.desc = 'spladtool.Layer.GreaterEqual'
+
+class Slice(Layer):
+    def __init__(self):
+        super().__init__()
+        self.desc = 'spladtool.Layer.Slice'
+    
+    def forward(self, x, index):
+        assert len(x.shape) == 1, 'Only support vector tensor for now'
+        data = float(x.data[index])
+        grad = np.zeros_like(x.grad)
+        grad[index] = x.grad[index]
+        return Tensor(data, grad)
+
 
 
 
